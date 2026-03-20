@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JavaIA — Asistente Java</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #0a0c10;
+  --bg2:       #111318;
+  --bg3:       #181c24;
+  --border:    #1e2330;
+  --border2:   #2a3045;
+  --accent:    #ff6b2b;
+  --accent2:   #ff9a5c;
+  --green:     #22c55e;
+  --blue:      #60a5fa;
+  --text:      #e8eaf0;
+  --text2:     #9aa0b4;
+  --text3:     #5a6278;
+  --mono:      'Space Mono', monospace;
+  --sans:      'Syne', sans-serif;
+  --r:         10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── HEADER ─────────────────────────────────── */
+header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.logo-icon {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.logo em { color: var(--accent); font-style: normal; }
+.logo-sub {
+  font-size: 0.7rem;
+  color: var(--text3);
+  font-weight: 400;
+  font-family: var(--mono);
+  margin-left: 4px;
+}
+
+.header-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  color: var(--text3);
+}
+.dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--text3);
+}
+.dot.ready { background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+/* ─── LAYOUT ─────────────────────────────────── */
+.layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 61px);
+}
+
+/* ─── SIDEBAR ────────────────────────────────── */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  border-right: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+
+.sidebar-title {
+  font-size: 0.65rem;
+  font-family: var(--mono);
+  letter-spacing: .12em;
+  color: var(--text3);
+  text-transform: uppercase;
+  padding: 0 16px 10px;
+}
+
+.example-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 16px;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--text2);
+  line-height: 1.4;
+  transition: background .12s, color .12s;
+  border-left: 2px solid transparent;
+}
+.example-btn:hover {
+  background: var(--bg3);
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+.sidebar-section {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+/* ─── CHAT AREA ──────────────────────────────── */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+/* ─── WELCOME ────────────────────────────────── */
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  gap: 16px;
+  animation: fadeUp .5s ease both;
+}
+.welcome-icon { font-size: 3rem; }
+.welcome h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.welcome h2 em { color: var(--accent); font-style: normal; }
+.welcome p {
+  color: var(--text2);
+  font-size: 0.92rem;
+  max-width: 480px;
+  line-height: 1.65;
+  font-family: var(--mono);
+}
+
+.quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+.chip {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: var(--mono);
+  transition: all .15s;
+}
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255,107,43,.08);
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(16px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ─── MENSAJES ───────────────────────────────── */
+.msg {
+  display: flex;
+  gap: 14px;
+  animation: fadeUp .3s ease both;
+}
+.msg.user { flex-direction: row-reverse; }
+
+.avatar {
+  width: 32px; height: 32px; min-width: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+.avatar.ia { background: var(--accent); color: #fff; }
+.avatar.user { background: var(--bg3); border: 1px solid var(--border2); color: var(--text2); }
+
+.bubble {
+  max-width: 78%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text);
+}
+.msg.user .bubble {
+  background: rgba(255,107,43,.1);
+  border-color: rgba(255,107,43,.25);
+  color: var(--text);
+}
+
+/* ─── RESPUESTA ──────────────────────────────── */
+.resp-section {
+  margin-bottom: 14px;
+}
+.resp-label {
+  font-size: 0.65rem;
+  font-family: var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.resp-label::before {
+  content: '';
+  display: inline-block;
+  width: 10px; height: 2px;
+  background: var(--accent);
+}
+
+.resp-text { color: var(--text); line-height: 1.7; }
+.resp-text strong { color: var(--accent2); font-weight: 600; }
+
+/* código inline */
+.resp-text code, .inline-code {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  background: rgba(255,107,43,.12);
+  border: 1px solid rgba(255,107,43,.2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--accent2);
+}
+
+/* bloque de código */
+.code-block {
+  background: #0d1117;
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-top: 10px;
+}
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px;
+  background: #161b22;
+  border-bottom: 1px solid var(--border2);
+}
+.code-lang {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.copy-btn {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  color: var(--text3);
+  padding: 2px 10px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn.ok { border-color: var(--green); color: var(--green); }
+
+.code-body {
+  overflow-x: auto;
+  padding: 14px 16px;
+}
+.code-body pre {
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #c9d1d9;
+  white-space: pre;
+  display: inline-block;
+  min-width: 100%;
+}
+
+/* syntax highlight */
+.kw  { color: #ff7b72; }
+.cl  { color: #ffa657; }
+.st  { color: #a5d6ff; }
+.cm  { color: #6e7681; font-style: italic; }
+.nu  { color: #79c0ff; }
+.an  { color: #d2a8ff; }
+
+/* fuentes relacionadas */
+.sources {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.source-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  color: var(--text3);
+  cursor: pointer;
+  transition: all .15s;
+}
+.source-tag:hover { border-color: var(--blue); color: var(--blue); }
+
+/* loading */
+.loading .bubble {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 20px;
+}
+.dot-loader span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  animation: bounce .9s infinite;
+}
+.dot-loader span:nth-child(2) { animation-delay: .15s; }
+.dot-loader span:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(.7);opacity:.4} 40%{transform:scale(1);opacity:1} }
+
+/* ─── INPUT ──────────────────────────────────── */
+.input-area {
+  border-top: 1px solid var(--border);
+  padding: 16px 28px 20px;
+  background: var(--bg2);
+}
+
+.input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 10px 12px;
+  transition: border-color .2s;
+}
+.input-wrap:focus-within { border-color: var(--accent); }
+
+textarea {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  resize: none;
+  min-height: 22px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+textarea::placeholder { color: var(--text3); }
+
+.send-btn {
+  width: 36px; height: 36px; min-width: 36px;
+  border-radius: 8px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .15s, transform .1s;
+  color: #fff;
+  font-size: 1rem;
+}
+.send-btn:hover { opacity: .85; }
+.send-btn:active { transform: scale(.94); }
+.send-btn:disabled { opacity: .3; cursor: default; }
+
+.input-hint {
+  font-size: 0.68rem;
+  font-family: var(--mono);
+  color: var(--text3);
+  margin-top: 8px;
+  display: flex;
+  gap: 14px;
+}
+.input-hint kbd {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">☕</div>
+    Java<em>IA</em>
+    <span class="logo-sub">asistente</span>
+  </div>
+  <div class="header-status">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">cargando base de conocimiento…</span>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR con ejemplos rápidos -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Ejemplos rápidos</div>
+
+    <div id="sidebar-examples"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Temas disponibles</div>
+      <div id="sidebar-topics"></div>
+    </div>
+  </aside>
+
+  <!-- CHAT -->
+  <div class="chat-area">
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon">🤖</div>
+        <h2>Hola, soy <em>JavaIA</em></h2>
+        <p>Pégame cualquier pregunta o enunciado de Java — te explico qué hace, qué patrón aplica y te doy el código exacto.</p>
+        <div class="quick-chips" id="quick-chips"></div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <div class="input-wrap">
+        <textarea
+          id="input"
+          placeholder="Pega aquí una pregunta, enunciado o concepto de Java..."
+          rows="1"
+        ></textarea>
+        <button class="send-btn" id="send-btn" disabled title="Enviar (Ctrl+Enter)">➤</button>
+      </div>
+      <div class="input-hint">
+        <span><kbd>Ctrl</kbd><kbd>Enter</kbd> enviar</span>
+        <span><kbd>Shift</kbd><kbd>Enter</kbd> nueva línea</span>
+        <span id="kb-count">0 secciones cargadas</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// BASE DE CONOCIMIENTO — carga los JSONs locales
+// ═══════════════════════════════════════════════════════
+let KB = {
+  docs: [],        // secciones de java.json
+  chuleta: [],     // secciones de chuleta
+  simulacro: []    // ejercicios del simulacro
+};
+
+const JSON_PATHS = [
+  { key: 'docs',      path: 'java.json',                                   type: 'docs'      },
+  { key: 'chuleta',   path: 'examenes/tema8/chuleta-examen-tema8.json',     type: 'chuleta'   },
+  { key: 'simulacro', path: 'examenes/tema8/simulacro-tema8.json',          type: 'simulacro' }
+];
+
+async function loadKB() {
+  let loaded = 0;
+  for (const { key, path, type } of JSON_PATHS) {
+    try {
+      const res = await fetch(path);
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (type === 'docs')      KB.docs      = data.sections  || [];
+      if (type === 'chuleta')   KB.chuleta   = data.secciones || [];
+      if (type === 'simulacro') KB.simulacro = data.ejercicios || [];
+      loaded++;
+    } catch(e) { /* archivo no disponible */ }
+  }
+  return loaded;
+}
+
+// ═══════════════════════════════════════════════════════
+// MOTOR DE BÚSQUEDA — encuentra secciones relevantes
+// ═══════════════════════════════════════════════════════
+
+// Palabras clave → secciones de docs
+const KEYWORD_MAP = {
+  'stream': ['streams','lambda','colecciones'],
+  'filter': ['streams'],
+  'map()': ['streams'],
+  'collect': ['streams'],
+  'reduce': ['streams'],
+  'sorted': ['streams','comparable-comparator'],
+  'comparator': ['comparable-comparator'],
+  'comparable': ['comparable-comparator'],
+  'foreach': ['streams','lambda'],
+  'lambda': ['lambda','streams'],
+  'arraylist': ['arraylist','colecciones'],
+  'hashmap': ['colecciones'],
+  'hashset': ['colecciones'],
+  'list': ['colecciones','arraylist'],
+  'set': ['colecciones'],
+  'map': ['colecciones'],
+  'iterator': ['iteradores'],
+  'generic': ['genericos','genericos-avanzado'],
+  'genérico': ['genericos','genericos-avanzado'],
+  '<t>': ['genericos','genericos-avanzado'],
+  'repositorio': ['genericos-avanzado'],
+  'abstract': ['abstracto'],
+  'abstracta': ['abstracto'],
+  'extends': ['herencia'],
+  'herencia': ['herencia'],
+  'interface': ['abstracto'],
+  'interfaz': ['abstracto'],
+  'implements': ['abstracto','herencia'],
+  'static': ['clases-objetos'],
+  'equals': ['clases-objetos','encapsulacion'],
+  'hashcode': ['clases-objetos'],
+  'tostring': ['clases-objetos'],
+  'constructor': ['constructores'],
+  'encapsulacion': ['encapsulacion'],
+  'getter': ['encapsulacion'],
+  'setter': ['encapsulacion'],
+  'try': ['trycatch'],
+  'catch': ['trycatch'],
+  'excepcion': ['trycatch'],
+  'if': ['if-else'],
+  'for': ['for'],
+  'while': ['while'],
+  'array': ['arrays'],
+  'string': ['strings'],
+  'math': ['math'],
+  'scanner': ['scanner'],
+  'fichero': ['ficheros'],
+};
+
+function normalizeText(t) {
+  return t.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[()]/g, '');
+}
+
+function searchKB(query) {
+  const q = normalizeText(query);
+  const words = q.split(/\s+/).filter(w => w.length > 2);
+  const results = { docs: [], chuleta: [], simulacro: [], codeExamples: [], patterns: [] };
+
+  // ─── 1. Buscar en docs (java.json) ───────────────────
+  const docScores = {};
+  KB.docs.forEach(sec => {
+    let score = 0;
+    const secText = normalizeText(sec.title + ' ' + sec.content + ' ' + sec.tags.join(' '));
+
+    // Tags match
+    sec.tags.forEach(tag => { if (q.includes(normalizeText(tag))) score += 5; });
+
+    // Keyword map
+    for (const [kw, ids] of Object.entries(KEYWORD_MAP)) {
+      if (q.includes(kw) && ids.includes(sec.id)) score += 8;
+    }
+
+    // Palabras en texto
+    words.forEach(w => { if (secText.includes(w)) score += 2; });
+
+    // ID directo
+    if (q.includes(sec.id)) score += 10;
+
+    // Subsecciones
+    (sec.subsections || []).forEach(ss => {
+      const ssText = normalizeText((ss.title||'') + ' ' + (ss.explanation||'') + ' ' + (ss.text||'') + ' ' + (ss.code||''));
+      words.forEach(w => { if (ssText.includes(w)) score += 3; });
+      if (ss.code) {
+        const codeText = normalizeText(ss.code);
+        words.forEach(w => { if (codeText.includes(w)) score += 2; });
+      }
+    });
+
+    if (score > 0) docScores[sec.id] = { sec, score };
+  });
+
+  results.docs = Object.values(docScores)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 4)
+    .map(x => x.sec);
+
+  // ─── 2. Buscar en chuleta ────────────────────────────
+  KB.chuleta.forEach(sec => {
+    let score = 0;
+    const secText = normalizeText(sec.titulo + ' ' + sec.descripcion);
+    words.forEach(w => { if (secText.includes(w)) score += 2; });
+
+    // Keywords específicos de chuleta
+    const CHULETA_KW = {
+      'stream': 'ej8-patron', 'filter': 'ej8-patron', 'comparator': 'ej8-patron',
+      'comparable': 'ej7-patron', 'mostrarmay': 'ej7-patron',
+      'gestor': 'ej6-patron', 'hashmap': 'ej6-patron', 'hashset': 'ej6-patron',
+      'repositorio': 'ej5-patron', '<t>': 'ej5-patron',
+      'interface': 'ej4-patron', 'interfaz': 'ej4-patron', 'informable': 'ej4-patron',
+      'herencia': 'ej3-patron', 'abstract': 'ej3-patron', 'veterinario': 'ej3-patron',
+      'static': 'ej2-patron', 'mascota': 'ej2-patron', 'totalmascota': 'ej2-patron',
+      'propietario': 'ej1-patron', 'equals': 'ej1-patron', 'constructor copia': 'ej1-patron',
+      'supervivencia': 'supervivencia', 'error': 'supervivencia',
+      'plantilla': 'mini-plantillas', 'copiar': 'mini-plantillas',
+    };
+    for (const [kw, id] of Object.entries(CHULETA_KW)) {
+      if (q.includes(kw) && sec.id === id) score += 10;
+    }
+
+    if (score > 0) results.chuleta.push({ sec, score });
+  });
+  results.chuleta.sort((a,b) => b.score - a.score);
+  results.chuleta = results.chuleta.slice(0,2).map(x => x.sec);
+
+  // ─── 3. Buscar en simulacro ──────────────────────────
+  KB.simulacro.forEach(ej => {
+    let score = 0;
+    const ejText = normalizeText(ej.titulo + ' ' + ej.enunciado + ' ' + ej.apartados.join(' '));
+    words.forEach(w => { if (ejText.includes(w)) score += 3; });
+    if (ej.solucion?.codigo) {
+      const codeText = normalizeText(ej.solucion.codigo);
+      words.forEach(w => { if (codeText.includes(w)) score += 2; });
+    }
+    if (score > 2) results.simulacro.push({ ej, score });
+  });
+  results.simulacro.sort((a,b) => b.score - a.score);
+  results.simulacro = results.simulacro.slice(0,2).map(x => x.ej);
+
+  // ─── 4. Extraer ejemplos de código relevantes ────────
+  results.docs.forEach(sec => {
+    (sec.subsections || []).forEach(ss => {
+      if (ss.code) {
+        const ssText = normalizeText((ss.title||'') + ' ' + (ss.explanation||'') + ' ' + ss.code);
+        const matchScore = words.filter(w => ssText.includes(w)).length;
+        if (matchScore > 0) {
+          results.codeExamples.push({ title: ss.title, code: ss.code, explanation: ss.explanation || ss.text || '', from: sec.title });
+        }
+      }
+    });
+  });
+  results.codeExamples = results.codeExamples.slice(0, 3);
+
+  // ─── 5. Patrones de chuleta con código ───────────────
+  results.chuleta.forEach(sec => {
+    sec.bloques.filter(b => b.tipo === 'codigo').forEach(b => {
+      results.patterns.push({ title: b.titulo, code: b.codigo, from: sec.titulo });
+    });
+  });
+  results.patterns = results.patterns.slice(0, 2);
+
+  return results;
+}
+
+// ═══════════════════════════════════════════════════════
+// GENERADOR DE RESPUESTA — construye HTML de respuesta
+// ═══════════════════════════════════════════════════════
+
+function detectQueryType(q) {
+  const n = normalizeText(q);
+  if (n.includes('que es') || n.includes('qué es') || n.includes('explica') || n.includes('define')) return 'explain';
+  if (n.includes('como se') || n.includes('cómo se') || n.includes('como hacer') || n.includes('como implementar')) return 'howto';
+  if (n.includes('error') || n.includes('falla') || n.includes('no compila') || n.includes('no funciona')) return 'debug';
+  if (n.includes('diferencia') || n.includes('vs') || n.includes('cual es mejor')) return 'compare';
+  if (n.includes('ordena') || n.includes('filtra') || n.includes('obtén') || n.includes('calcula') || n.includes('muestra')) return 'task';
+  if (q.split('\n').length > 3 || q.length > 200) return 'multipart';
+  return 'general';
+}
+
+function buildExplanation(query, results) {
+  const type = detectQueryType(query);
+  const lines = query.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+  const isMultipart = lines.length > 2;
+
+  let html = '';
+
+  // ─── Cabecera de contexto
+  if (results.docs.length || results.chuleta.length) {
+    const topics = [...new Set([
+      ...results.docs.map(s => s.title),
+      ...results.chuleta.map(s => s.titulo)
+    ])].slice(0, 4);
+
+    html += `<div class="resp-section">
+      <div class="resp-label">Temas detectados</div>
+      <div class="sources">
+        ${topics.map(t => `<span class="source-tag">📖 ${escH(t)}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // ─── Si es multilínea (lista de tareas tipo examen)
+  if (isMultipart || type === 'multipart' || type === 'task') {
+    html += buildMultipartAnswer(query, lines, results);
+    return html;
+  }
+
+  // ─── Respuesta explicativa general
+  html += buildGeneralAnswer(query, results, type);
+  return html;
+}
+
+function buildGeneralAnswer(query, results, type) {
+  let html = '';
+  const q = normalizeText(query);
+
+  // ─── Buscar la explicación más relevante en docs
+  let mainExplanation = '';
+  let mainTitle = '';
+  for (const sec of results.docs) {
+    for (const ss of (sec.subsections || [])) {
+      if (ss.explanation && ss.explanation.length > 30) {
+        mainExplanation = ss.explanation;
+        mainTitle = ss.title;
+        break;
+      }
+      if (ss.text && ss.text.length > 30) {
+        mainExplanation = ss.text;
+        mainTitle = ss.title;
+        break;
+      }
+    }
+    if (mainExplanation) break;
+  }
+  if (!mainExplanation && results.docs.length) {
+    mainExplanation = results.docs[0].content;
+    mainTitle = results.docs[0].title;
+  }
+
+  if (mainExplanation) {
+    html += `<div class="resp-section">
+      <div class="resp-label">${escH(mainTitle || 'Explicación')}</div>
+      <div class="resp-text">${formatText(mainExplanation)}</div>
+    </div>`;
+  }
+
+  // ─── Código más relevante
+  if (results.codeExamples.length) {
+    const ex = results.codeExamples[0];
+    if (ex.explanation) {
+      html += `<div class="resp-section">
+        <div class="resp-label">Concepto clave</div>
+        <div class="resp-text">${formatText(ex.explanation)}</div>
+      </div>`;
+    }
+    html += `<div class="resp-section">
+      <div class="resp-label">${escH(ex.title)}</div>
+      ${buildCodeBlock(ex.code)}
+    </div>`;
+  }
+
+  // ─── Patrón de chuleta si lo hay
+  if (results.patterns.length) {
+    const p = results.patterns[0];
+    html += `<div class="resp-section">
+      <div class="resp-label">Plantilla — ${escH(p.from)}</div>
+      ${buildCodeBlock(p.code)}
+    </div>`;
+  }
+
+  // ─── Si no encontró nada relevante
+  if (!mainExplanation && !results.codeExamples.length) {
+    html += `<div class="resp-section">
+      <div class="resp-text">No encontré información exacta sobre eso en mi base de conocimiento. Prueba a reformular o a mencionar una palabra clave como <code>stream</code>, <code>HashMap</code>, <code>abstract</code>, etc.</div>
+    </div>`;
+  }
+
+  return html;
+}
+
+function buildMultipartAnswer(query, lines, results) {
+  let html = '';
+
+  // Detectar si hay letras tipo a), b), c) o números
+  const hasLetters = lines.some(l => /^[a-z]\)/.test(l));
+  const hasNumbers = lines.some(l => /^\d+\./.test(l));
+
+  if (hasLetters || hasNumbers) {
+    // Respuesta por apartados
+    html += `<div class="resp-section">
+      <div class="resp-label">Respuesta por apartados</div>
+    </div>`;
+
+    const taskLines = lines.filter(l => /^[a-z\d][\).]/.test(l));
+
+    taskLines.forEach(line => {
+      const letter = line.match(/^([a-z\d])[\).]/)?.[1] || '';
+      const text = line.replace(/^[a-z\d][\).]\s*/, '');
+      const taskResult = analyzeTask(text, results);
+
+      html += `<div class="resp-section" style="margin-left:0; border-left: 2px solid var(--border2); padding-left: 14px;">
+        <div class="resp-label" style="color: var(--blue);">${letter ? letter.toUpperCase() + ')' : ''} ${escH(text.slice(0, 60))}${text.length > 60 ? '…' : ''}</div>
+        <div class="resp-text" style="margin-bottom:8px">${formatText(taskResult.explanation)}</div>
+        ${taskResult.code ? buildCodeBlock(taskResult.code) : ''}
+      </div>`;
+    });
+
+    // Si quedan líneas sin letra (contexto adicional)
+    const contextLines = lines.filter(l => !/^[a-z\d][\).]/.test(l));
+    if (contextLines.length && results.codeExamples.length) {
+      html += `<div class="resp-section">
+        <div class="resp-label">Código de referencia adicional</div>
+        ${buildCodeBlock(results.codeExamples[0].code)}
+      </div>`;
+    }
+
+  } else {
+    // Lista sin letras — analizar en conjunto
+    html += buildGeneralAnswer(query, results, 'general');
+  }
+
+  return html;
+}
+
+// ─── Analiza una tarea concreta y devuelve explicación + código
+function analyzeTask(taskText, results) {
+  const t = normalizeText(taskText);
+  let explanation = '';
+  let code = '';
+
+  // Patrones específicos de Stream
+  if (t.includes('sort') || t.includes('orden')) {
+    if (t.includes('revers') || t.includes('invers') || t.includes('descendente') || t.includes('desc')) {
+      if (t.includes('thencompar') || t.includes('empate') || t.includes('especie')) {
+        explanation = 'Usa <code>Comparator.comparing()</code> encadenado con <code>.thenComparing()</code> para criterio secundario. El <code>.reversed()</code> aplica al comparador que lo recibe.';
+        code = 'lista.sort(\n    Comparator.comparing(Mascota::getEspecie)\n              .thenComparing(Comparator.comparing(Mascota::getEdad).reversed())\n);';
+      } else {
+        explanation = 'Usa <code>Comparator.comparing(getter).reversed()</code> para invertir el orden.';
+        code = 'lista.sort(Comparator.comparing(Mascota::getNombre).reversed());';
+      }
+    } else {
+      explanation = 'Usa <code>lista.sort(Comparator.comparing(getter))</code> para orden ascendente. Esto modifica la lista original.';
+      code = 'lista.sort(Comparator.comparing(Mascota::getEdad));\nlista.forEach(System.out::println);';
+    }
+  } else if (t.includes('filtr') || t.includes('filter')) {
+    if (t.includes('cachorro') || t.includes('edad < 2') || t.includes('edad<2')) {
+      explanation = '<code>filter()</code> devuelve solo los elementos que cumplan la condición. <code>count()</code> cuenta cuántos hay sin crear lista.';
+      code = 'long numCachorros = lista.stream()\n    .filter(m -> m.getEdad() < 2)\n    .count();\nSystem.out.println("Cachorros: " + numCachorros);';
+    } else if (t.includes('perro') || t.includes('especie')) {
+      explanation = 'Encadena <code>filter()</code> + <code>sorted()</code> + <code>forEach()</code>. Los streams no modifican la lista original.';
+      code = 'lista.stream()\n    .filter(m -> m.getEspecie().equals("Perro"))\n    .sorted(Comparator.comparing(Mascota::getNombre))\n    .forEach(System.out::println);';
+    } else {
+      explanation = '<code>stream().filter(condicion)</code> devuelve un nuevo stream solo con los elementos que cumplen la condición.';
+      code = 'List<Mascota> resultado = lista.stream()\n    .filter(m -> /* condición */)\n    .collect(Collectors.toList());';
+    }
+  } else if (t.includes('nombre') && (t.includes('map') || t.includes('obtén') || t.includes('lista'))) {
+    explanation = '<code>map()</code> transforma cada elemento. Aquí convierte cada <code>Mascota</code> en su nombre (<code>String</code>). <code>collect(Collectors.toList())</code> recoge el resultado.';
+    code = 'List<String> nombres = lista.stream()\n    .map(Mascota::getNombre)\n    .collect(Collectors.toList());\nSystem.out.println(nombres);';
+  } else if (t.includes('media') || t.includes('promedio')) {
+    explanation = '<code>map()</code> extrae la edad (int). <code>reduce(0, Integer::sum)</code> suma todos. Divide fuera del stream para obtener la media.';
+    code = 'double media = lista.stream()\n    .map(Mascota::getEdad)\n    .reduce(0, Integer::sum)\n    / (double) lista.size();\nSystem.out.println("Edad media: " + media);';
+  } else if (t.includes('distint') || t.includes('especies') || t.includes('set<string>')) {
+    explanation = '<code>map()</code> extrae el campo. <code>distinct()</code> elimina duplicados del stream. <code>collect(Collectors.toSet())</code> recoge en un <code>Set</code> (también sin repetidos).';
+    code = 'Set<String> especies = lista.stream()\n    .map(Mascota::getEspecie)\n    .distinct()\n    .collect(Collectors.toSet());\nSystem.out.println(especies);';
+  } else if (t.includes('mostrar') || t.includes('muestra') || t.includes('imprim')) {
+    if (t.includes('todos') || t.includes('foreach')) {
+      explanation = '<code>forEach()</code> es la forma más limpia de mostrar todos los elementos. Con referencia a método queda muy compacto.';
+      code = 'lista.forEach(System.out::println);\n// equivalente a:\nlista.forEach(x -> System.out.println(x));';
+    } else {
+      explanation = 'Usa <code>stream().filter().forEach()</code> para mostrar los que cumplan una condición.';
+      code = 'lista.stream()\n    .filter(x -> condicion)\n    .forEach(System.out::println);';
+    }
+  } else if (t.includes('agrupar') || t.includes('groupingby') || t.includes('map<string')) {
+    explanation = '<code>Collectors.groupingBy()</code> agrupa los elementos en un <code>Map</code> usando el getter como clave.';
+    code = 'Map<String, List<Mascota>> porEspecie = lista.stream()\n    .collect(Collectors.groupingBy(Mascota::getEspecie));\n\n// Con conteo:\nMap<String, Long> conteo = lista.stream()\n    .collect(Collectors.groupingBy(Mascota::getEspecie, Collectors.counting()));';
+  } else if (t.includes('anymatch') || t.includes('allm') || t.includes('nonem')) {
+    explanation = '<code>anyMatch()</code> devuelve <code>true</code> si al menos uno cumple. <code>allMatch()</code> si todos. <code>noneMatch()</code> si ninguno.';
+    code = 'boolean hayJovenes  = lista.stream().anyMatch(m -> m.getEdad() < 2);\nboolean todosMayores = lista.stream().allMatch(m -> m.getEdad() >= 0);\nboolean sinGatos     = lista.stream().noneMatch(m -> m.getEspecie().equals("Gato"));';
+  } else if (t.includes('max') || t.includes('min') || t.includes('mas caro') || t.includes('más caro')) {
+    explanation = '<code>max()</code> y <code>min()</code> devuelven un <code>Optional</code>. Usa <code>.ifPresent()</code> o <code>.get()</code> para acceder al valor.';
+    code = 'Optional<Mascota> mayor = lista.stream()\n    .max(Comparator.comparing(Mascota::getEdad));\nmayor.ifPresent(m -> System.out.println("Mayor: " + m));\n\nOptional<Mascota> menor = lista.stream()\n    .min(Comparator.comparing(Mascota::getEdad));\nmenor.ifPresent(m -> System.out.println("Menor: " + m));';
+  } else if (t.includes('findfirst') || t.includes('primer')) {
+    explanation = '<code>findFirst()</code> devuelve el primer elemento que pasa el filtro como <code>Optional</code>.';
+    code = 'Optional<Mascota> primero = lista.stream()\n    .filter(m -> m.getEspecie().equals("Perro"))\n    .findFirst();\nprimero.ifPresent(System.out::println);';
+  } else if (t.includes('partition') || t.includes('separar') || t.includes('premium')) {
+    explanation = '<code>Collectors.partitioningBy()</code> divide en dos grupos: los que cumplen la condición (<code>true</code>) y los que no (<code>false</code>).';
+    code = 'Map<Boolean, List<Mascota>> particion = lista.stream()\n    .collect(Collectors.partitioningBy(m -> m.getEdad() < 2));\nList<Mascota> cachorros = particion.get(true);\nList<Mascota> adultos   = particion.get(false);';
+  } else if (t.includes('flatmap') || t.includes('pedido')) {
+    explanation = '<code>flatMap()</code> "aplana" listas dentro de objetos. Si cada pedido tiene una lista de productos, <code>flatMap</code> los junta todos en un solo stream.';
+    code = 'List<String> todosProductos = pedidos.stream()\n    .flatMap(p -> p.getProductos().stream())\n    .distinct()\n    .collect(Collectors.toList());';
+  } else if (t.includes('mapToDouble') || t.includes('sum') || t.includes('precio total') || t.includes('suma')) {
+    explanation = '<code>mapToDouble()</code> convierte a un <code>DoubleStream</code> que tiene el método <code>.sum()</code> directamente.';
+    code = 'double total = lista.stream()\n    .mapToDouble(Mascota::getPrecio)  // o getEdad() según el campo\n    .sum();\nSystem.out.println("Total: " + total);';
+  } else {
+    // Búsqueda genérica
+    const matchingCode = results.codeExamples.find(ex => {
+      const exText = normalizeText(ex.title + ' ' + ex.explanation + ' ' + ex.code);
+      const words = t.split(/\s+/).filter(w => w.length > 3);
+      return words.filter(w => exText.includes(w)).length >= 2;
+    });
+    if (matchingCode) {
+      explanation = matchingCode.explanation || 'Ejemplo relevante encontrado en la documentación.';
+      code = matchingCode.code;
+    } else {
+      explanation = 'Analiza el contexto: usa <code>lista.stream()</code> como punto de partida y encadena las operaciones necesarias.';
+      code = results.codeExamples[0]?.code || '';
+    }
+  }
+
+  return { explanation, code };
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILIDADES DE RENDERIZADO
+// ═══════════════════════════════════════════════════════
+
+function escH(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatText(text) {
+  if (!text) return '';
+  return escH(text)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/'([A-Z][a-zA-Z<>]+\(\))'/g, '<code>$1</code>')
+    .replace(/\n/g, '<br>');
+}
+
+let cbCounter = 0;
+function buildCodeBlock(code) {
+  if (!code) return '';
+  const id = 'cb' + (++cbCounter);
+  const highlighted = highlightJava(escH(code));
+  return `<div class="code-block">
+    <div class="code-header">
+      <span class="code-lang">java</span>
+      <button class="copy-btn" onclick="copyCode('${id}',this)">copiar</button>
+    </div>
+    <div class="code-body"><pre id="${id}">${highlighted}</pre></div>
+  </div>`;
+}
+
+function highlightJava(code) {
+  const KW = /\b(public|private|protected|static|void|int|double|float|boolean|char|String|long|short|byte|final|class|interface|abstract|extends|implements|new|return|if|else|for|while|do|switch|case|default|break|continue|import|package|this|super|try|catch|finally|throw|throws|null|true|false|instanceof|enum|var)\b/g;
+  const AN = /(@[A-Za-z]+)\b/g;
+  const CM = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)/g;
+  const ST = /(&#34;(?:[^&#]|&#34;)*?&#34;|&quot;(?:[^&]|&(?!quot;))*?&quot;)/g;
+  const NU = /\b(\d+\.?\d*)\b/g;
+  const CL = /\b([A-Z][A-Za-z0-9_]*)\b/g;
+
+  const cph = [], sph = [];
+  code = code.replace(CM, m => { cph.push(m); return `__C${cph.length-1}__`; });
+  code = code.replace(ST, m => { sph.push(m); return `__S${sph.length-1}__`; });
+  code = code.replace(AN, '<span class="an">$1</span>');
+  code = code.replace(KW, '<span class="kw">$1</span>');
+  code = code.replace(NU, '<span class="nu">$1</span>');
+  code = code.replace(CL, '<span class="cl">$1</span>');
+  sph.forEach((s,i) => code = code.replace(`__S${i}__`, `<span class="st">${s}</span>`));
+  cph.forEach((c,i) => code = code.replace(`__C${i}__`, `<span class="cm">${c}</span>`));
+  return code;
+}
+
+function copyCode(id, btn) {
+  const pre = document.getElementById(id);
+  if (!pre) return;
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    btn.textContent = '✓ copiado'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('ok'); }, 1800);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = pre.textContent;
+    ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    btn.textContent = '✓ copiado'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'copiar'; btn.classList.remove('ok'); }, 1800);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// CHAT — añadir mensajes
+// ═══════════════════════════════════════════════════════
+
+function addMsg(role, html, isHTML = false) {
+  const msgs = document.getElementById('messages');
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.style.display = 'none';
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const avatar = document.createElement('div');
+  avatar.className = `avatar ${role}`;
+  avatar.textContent = role === 'ia' ? 'IA' : 'tú';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  if (isHTML) bubble.innerHTML = html;
+  else bubble.textContent = html;
+
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function addLoading() {
+  const div = document.createElement('div');
+  div.className = 'msg ia loading';
+  div.innerHTML = `<div class="avatar ia">IA</div>
+    <div class="bubble"><div class="dot-loader"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('messages').appendChild(div);
+  document.getElementById('messages').scrollTop = 99999;
+  return div;
+}
+
+// ═══════════════════════════════════════════════════════
+// ENVIAR CONSULTA
+// ═══════════════════════════════════════════════════════
+
+async function sendQuery(queryText) {
+  if (!queryText.trim()) return;
+
+  addMsg('user', queryText);
+
+  const loader = addLoading();
+
+  // Simular procesamiento (buscar en KB)
+  await new Promise(r => setTimeout(r, 400 + Math.random() * 300));
+
+  const results = searchKB(queryText);
+  const responseHTML = buildExplanation(queryText, results);
+
+  loader.remove();
+  addMsg('ia', responseHTML, true);
+}
+
+// ═══════════════════════════════════════════════════════
+// SIDEBAR — ejemplos y temas
+// ═══════════════════════════════════════════════════════
+
+const SIDEBAR_EXAMPLES = [
+  'Ordena la lista por nombre en orden inverso usando Comparator',
+  'Filtra los cachorros con edad < 2 y cuéntalos con count()',
+  'Obtén una List<String> con los nombres usando map() y collect()',
+  'Calcula la edad media con map() y reduce()',
+  'Obtén un Set<String> con todas las especies distintas',
+  'Mostrar productos con stock menor de 10',
+  'Agrupar productos por categoría con groupingBy()',
+  'Busca el primer producto de Audio con findFirst()',
+  'Separa clientes premium con partitioningBy()',
+  'Obtén todos los productos de todos los pedidos con flatMap()',
+];
+
+const QUICK_CHIPS = [
+  'filter() + count()',
+  'map() + collect()',
+  'sorted() + reversed()',
+  'reduce() media',
+  'groupingBy()',
+  'flatMap()',
+];
+
+function buildSidebar() {
+  const ex = document.getElementById('sidebar-examples');
+  SIDEBAR_EXAMPLES.forEach(text => {
+    const btn = document.createElement('button');
+    btn.className = 'example-btn';
+    btn.textContent = text;
+    btn.onclick = () => {
+      document.getElementById('input').value = text;
+      autoResize(document.getElementById('input'));
+      sendQuery(text);
+    };
+    ex.appendChild(btn);
+  });
+
+  // Chips rápidos
+  const chips = document.getElementById('quick-chips');
+  QUICK_CHIPS.forEach(text => {
+    const btn = document.createElement('button');
+    btn.className = 'chip';
+    btn.textContent = text;
+    btn.onclick = () => sendQuery(text);
+    chips.appendChild(btn);
+  });
+
+  // Temas del KB
+  const topics = document.getElementById('sidebar-topics');
+  KB.docs.slice(0, 14).forEach(sec => {
+    const btn = document.createElement('button');
+    btn.className = 'example-btn';
+    btn.textContent = `${sec.icon || '📖'} ${sec.title}`;
+    btn.onclick = () => sendQuery(`Explícame ${sec.title}`);
+    topics.appendChild(btn);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// INPUT — auto-resize y eventos
+// ═══════════════════════════════════════════════════════
+
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 180) + 'px';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const input   = document.getElementById('input');
+  const sendBtn = document.getElementById('send-btn');
+  const statusDot  = document.getElementById('status-dot');
+  const statusText = document.getElementById('status-text');
+  const kbCount    = document.getElementById('kb-count');
+
+  // Cargar KB
+  const loaded = await loadKB();
+  const total = KB.docs.length + KB.chuleta.length + KB.simulacro.length;
+
+  if (total > 0) {
+    statusDot.classList.add('ready');
+    statusText.textContent = 'listo · ' + total + ' entradas';
+    kbCount.textContent = `${KB.docs.length} docs · ${KB.chuleta.length} chuleta · ${KB.simulacro.length} ejercicios`;
+    sendBtn.disabled = false;
+    buildSidebar();
+  } else {
+    statusText.textContent = 'sin datos locales — comprueba que java.json existe';
+  }
+
+  input.addEventListener('input', () => autoResize(input));
+
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      e.preventDefault();
+      const query = input.value.trim();
+      if (query) { sendQuery(query); input.value = ''; autoResize(input); }
+    }
+  });
+
+  sendBtn.addEventListener('click', () => {
+    const query = input.value.trim();
+    if (query) { sendQuery(query); input.value = ''; autoResize(input); }
+  });
+});
+</script>
+</body>
+</html>
