@@ -1,0 +1,1153 @@
+{
+  "meta": {
+    "title": "JavaDocs ES — Documentación Java en Español",
+    "version": "2.1"
+  },
+  "sections": [
+    {
+      "id": "intro",
+      "title": "¿Qué es Java?",
+      "icon": "☕",
+      "category": "Fundamentos",
+      "tags": [
+        "intro",
+        "que es java",
+        "introduccion",
+        "jvm",
+        "jdk",
+        "jre",
+        "historia"
+      ],
+      "content": "Java es un lenguaje de programación orientado a objetos, creado en 1995. Sigue el principio 'Write Once, Run Anywhere': el mismo código puede ejecutarse en cualquier plataforma con una JVM.",
+      "subsections": [
+        {
+          "title": "¿Por qué aprender Java?",
+          "list": [
+            "Orientado a objetos (POO)",
+            "Fuertemente tipado",
+            "Multiplataforma gracias a la JVM",
+            "Gestión automática de memoria (Garbage Collector)",
+            "Enorme ecosistema de librerías y frameworks"
+          ]
+        },
+        {
+          "title": "JDK, JRE y JVM",
+          "list": [
+            "JVM (Java Virtual Machine): ejecuta el bytecode",
+            "JRE (Java Runtime Environment): JVM + librerías para ejecutar",
+            "JDK (Java Development Kit): JRE + herramientas para desarrollar (compilador javac)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estructura",
+      "title": "Estructura de un Programa Java",
+      "icon": "🏗️",
+      "category": "Fundamentos",
+      "tags": [
+        "estructura",
+        "clase",
+        "main",
+        "metodo main",
+        "package",
+        "import",
+        "esqueleto",
+        "como se escribe",
+        "plantilla"
+      ],
+      "content": "Todo programa Java tiene una estructura básica obligatoria. Aquí la plantilla mínima para comenzar.",
+      "subsections": [
+        {
+          "title": "Plantilla mínima",
+          "code": "package mi_paquete; // Opcional — organiza el código en carpetas\n\nimport java.util.Scanner; // Opcional — importa clases externas\n\npublic class MiClase { // El nombre DEBE coincidir con el archivo .java\n\n    public static void main(String[] args) { // Punto de entrada\n        // Tu código va aquí\n        System.out.println(\"Hola Mundo\");\n    }\n}"
+        },
+        {
+          "title": "Reglas clave",
+          "list": [
+            "El nombre del archivo .java DEBE ser igual al nombre de la clase pública",
+            "Las clases siempre empiezan con Mayúscula (MiClase, no miclase)",
+            "Cada sentencia termina en punto y coma ;",
+            "Java distingue mayúsculas de minúsculas (case-sensitive)"
+          ]
+        },
+        {
+          "title": "Atajo psvm en IntelliJ",
+          "code": "// Escribe: psvm + Tab  →  genera:\npublic static void main(String[] args) {\n    \n}"
+        }
+      ]
+    },
+    {
+      "id": "variables",
+      "title": "Variables y Tipos de Datos",
+      "icon": "📦",
+      "category": "Fundamentos",
+      "tags": [
+        "variables",
+        "tipos",
+        "int",
+        "double",
+        "float",
+        "string",
+        "char",
+        "boolean",
+        "short",
+        "long",
+        "byte",
+        "final",
+        "constante",
+        "declarar",
+        "inicializar"
+      ],
+      "content": "Las variables son contenedores para datos. En Java cada variable tiene un tipo fijo que determina qué puede almacenar.",
+      "subsections": [
+        {
+          "title": "Tipos primitivos",
+          "code": "int edad = 25;              // Entero — 4 bytes — el más común\nlong poblacion = 8000000000L; // Entero grande — 8 bytes (L al final)\nshort pequeño = 200;        // Entero pequeño — 2 bytes\nbyte minimo = 100;          // Entero mínimo — 1 byte (−128 a 127)\n\ndouble altura = 1.87;       // Decimal preciso — 8 bytes (recomendado)\nfloat precio = 9.99f;       // Decimal — 4 bytes (f al final)\n\nboolean activo = true;      // Verdadero o falso\nchar letra = 'A';           // Un carácter (comillas simples)"
+        },
+        {
+          "title": "String — Cadenas de texto",
+          "code": "String nombre = \"Ana\";\nString saludo = \"Hola, \" + nombre; // Concatenar con +\nString salto = \"Línea 1\\nLínea 2\"; // \\n = salto de línea\n\n// Número → String\nint num = 42;\nString s = String.valueOf(num); // \"42\"\nString s2 = \"\" + num;           // \"42\" (atajo)"
+        },
+        {
+          "title": "Constantes con final",
+          "code": "final double PI = 3.14159;     // No puede cambiar\nfinal int MAX_INTENTOS = 3;    // Convención: MAYÚSCULAS\nfinal String APP = \"Mi App\";\n\n// PI = 5; // ERROR — las constantes son inmutables"
+        },
+        {
+          "title": "Casting — Conversión de tipos",
+          "code": "// Implícito (automático, de menor a mayor tamaño)\nint a = 10;\ndouble b = a; // b = 10.0  — sin código extra\n\n// Explícito (manual, puede perder datos)\ndouble x = 9.99;\nint y = (int) x; // y = 9  — se pierde el decimal\n\n// String → número\nint edad = Integer.parseInt(\"25\");\ndouble h = Double.parseDouble(\"1.87\");"
+        },
+        {
+          "title": "Clases Wrapper (Envoltorio)",
+          "code": "Integer num = 10;      // Envoltorio de int  (necesario para colecciones)\nDouble precio = 9.99;  // Envoltorio de double\nBoolean ok = true;     // Envoltorio de boolean\n\n// String → número con wrapper:\nint n = Integer.parseInt(\"42\");\ndouble d = Double.parseDouble(\"3.14\");"
+        }
+      ]
+    },
+    {
+      "id": "salida",
+      "title": "Salida por Pantalla",
+      "icon": "🖨️",
+      "category": "Fundamentos",
+      "tags": [
+        "print",
+        "println",
+        "printf",
+        "salida",
+        "imprimir",
+        "mostrar",
+        "system out",
+        "consola"
+      ],
+      "content": "Java ofrece varios métodos para mostrar datos por consola.",
+      "subsections": [
+        {
+          "title": "println vs print vs printf",
+          "code": "System.out.println(\"Hola\"); // Imprime y SALTA de línea\nSystem.out.print(\"Hola \");  // Imprime SIN saltar\nSystem.out.print(\"Mundo\");  // → Hola Mundo en la misma línea\n\n// printf: formato estilo C\nSystem.out.printf(\"Nombre: %s, Edad: %d%n\", \"Ana\", 25);\nSystem.out.printf(\"Precio: %.2f€%n\", 9.999); // → 10.00€\n// %s=String, %d=entero, %f=decimal, %n=nueva línea"
+        },
+        {
+          "title": "Caracteres especiales",
+          "code": "System.out.println(\"Línea1\\nLínea2\"); // \\n = nueva línea\nSystem.out.println(\"Col1\\tCol2\");     // \\t = tabulación\nSystem.out.println(\"Dice: \\\"Hola\\\"\"); // \\\" = comillas\nSystem.out.println(\"C:\\\\Users\");       // \\\\ = barra invertida"
+        }
+      ]
+    },
+    {
+      "id": "scanner",
+      "title": "Entrada de Datos — Scanner",
+      "icon": "⌨️",
+      "category": "Fundamentos",
+      "tags": [
+        "scanner",
+        "entrada",
+        "leer",
+        "input",
+        "nextint",
+        "nextline",
+        "nextdouble",
+        "usuario",
+        "teclado",
+        "leer datos"
+      ],
+      "content": "Para leer datos del usuario usamos la clase Scanner del paquete java.util.",
+      "subsections": [
+        {
+          "title": "Uso básico del Scanner",
+          "code": "import java.util.Scanner; // Importar arriba del archivo\n\npublic class Ejemplo {\n    public static void main(String[] args) {\n        Scanner leer = new Scanner(System.in);\n\n        System.out.print(\"Escribe tu nombre: \");\n        String nombre = leer.nextLine();  // Lee texto completo\n\n        System.out.print(\"Escribe tu edad: \");\n        int edad = leer.nextInt();        // Lee entero\n\n        System.out.println(\"Hola \" + nombre + \", tienes \" + edad + \" años\");\n        leer.close();\n    }\n}"
+        },
+        {
+          "title": "Métodos del Scanner",
+          "code": "leer.nextLine()    // Lee toda la línea (String)\nleer.next()        // Lee hasta el espacio (una palabra)\nleer.nextInt()     // Lee un entero\nleer.nextDouble()  // Lee un decimal\nleer.nextBoolean() // Lee true/false\nleer.nextLong()    // Lee un long"
+        },
+        {
+          "title": "⚠️ Problema del buffer — IMPORTANTE",
+          "code": "Scanner leer = new Scanner(System.in);\n\nSystem.out.print(\"Edad: \");\nint edad = leer.nextInt();\nleer.nextLine(); // ← LIMPIAR EL BUFFER (después de nextInt)\n\nSystem.out.print(\"Nombre: \");\nString nombre = leer.nextLine(); // Ahora funciona correctamente"
+        }
+      ]
+    },
+    {
+      "id": "operadores",
+      "title": "Operadores",
+      "icon": "➕",
+      "category": "Fundamentos",
+      "tags": [
+        "operadores",
+        "suma",
+        "resta",
+        "multiplicacion",
+        "division",
+        "modulo",
+        "resto",
+        "incremento",
+        "decremento",
+        "asignacion",
+        "comparacion",
+        "logicos"
+      ],
+      "content": "Los operadores permiten hacer operaciones con variables y valores.",
+      "subsections": [
+        {
+          "title": "Operadores aritméticos",
+          "code": "int a = 10, b = 3;\nSystem.out.println(a + b);  // 13 — suma\nSystem.out.println(a - b);  // 7  — resta\nSystem.out.println(a * b);  // 30 — multiplicación\nSystem.out.println(a / b);  // 3  — división ENTERA (no decimales)\nSystem.out.println(a % b);  // 1  — módulo (resto de la división)\n\n// Para obtener decimales:\ndouble r = (double) a / b; // 3.3333..."
+        },
+        {
+          "title": "Operadores de asignación",
+          "code": "int x = 10;\nx += 5;  // x = 15   (x = x + 5)\nx -= 3;  // x = 12   (x = x - 3)\nx *= 2;  // x = 24   (x = x * 2)\nx /= 4;  // x = 6    (x = x / 4)\nx %= 4;  // x = 2    (x = x % 4)"
+        },
+        {
+          "title": "Incremento y decremento",
+          "code": "int n = 5;\nn++; // n = 6 (post: usa el valor LUEGO incrementa)\n++n; // n = 7 (pre: incrementa LUEGO usa el valor)\nn--; // n = 6\n--n; // n = 5\n\n// Diferencia práctica:\nint a = 5;\nint b = a++; // b=5, a=6  (asigna, luego incrementa)\nint c = ++a; // c=7, a=7  (incrementa, luego asigna)"
+        },
+        {
+          "title": "Operadores de comparación",
+          "code": "int x = 5, y = 10;\nx == y  // false — igual a\nx != y  // true  — distinto de\nx > y   // false — mayor que\nx < y   // true  — menor que\nx >= y  // false — mayor o igual\nx <= y  // true  — menor o igual"
+        },
+        {
+          "title": "Operadores lógicos",
+          "code": "boolean a = true, b = false;\na && b  // false — Y lógico (ambos deben ser true)\na || b  // true  — O lógico (al menos uno true)\n!a      // false — NO lógico (niega)\n\n// Ejemplo:\nint edad = 20;\nboolean dni = true;\nif (edad >= 18 && dni) {\n    System.out.println(\"Puede entrar\");\n}"
+        }
+      ]
+    },
+    {
+      "id": "strings",
+      "title": "Métodos de String",
+      "icon": "📝",
+      "category": "Fundamentos",
+      "tags": [
+        "string",
+        "cadena",
+        "texto",
+        "length",
+        "toUpperCase",
+        "toLowerCase",
+        "substring",
+        "contains",
+        "equals",
+        "replace",
+        "trim",
+        "split",
+        "charAt",
+        "indexOf"
+      ],
+      "content": "La clase String tiene métodos muy útiles para manipular texto.",
+      "subsections": [
+        {
+          "title": "Métodos principales",
+          "code": "String s = \"Hola Mundo\";\n\ns.length()               // 10  — longitud\ns.toUpperCase()          // \"HOLA MUNDO\"\ns.toLowerCase()          // \"hola mundo\"\ns.trim()                 // elimina espacios al inicio/final\ns.charAt(0)              // 'H'   — carácter en posición\ns.indexOf(\"Mundo\")       // 5    — posición del texto\ns.contains(\"Hola\")       // true\ns.startsWith(\"Hola\")    // true\ns.endsWith(\"Mundo\")     // true\ns.replace(\"Hola\",\"Bye\") // \"Bye Mundo\"\ns.substring(5)           // \"Mundo\"     — desde posición 5\ns.substring(0, 4)        // \"Hola\"      — entre 0 y 4\ns.isEmpty()              // false  — ¿está vacío?\ns.isBlank()              // false  — ¿vacío o solo espacios?"
+        },
+        {
+          "title": "⚠️ Comparar Strings — equals()",
+          "code": "String a = \"hola\";\nString b = \"HOLA\";\n\n// MAL — compara referencias, no el contenido:\nif (a == b) { ... }\n\n// BIEN:\nif (a.equals(b)) { ... }           // false (distingue mayúsculas)\nif (a.equalsIgnoreCase(b)) { ... } // true  (ignora mayúsculas)"
+        },
+        {
+          "title": "Dividir con split()",
+          "code": "String csv = \"Ana,Pedro,Luis,María\";\nString[] nombres = csv.split(\",\");\n// nombres[0]=\"Ana\", nombres[1]=\"Pedro\"...\n\nfor (String nombre : nombres) {\n    System.out.println(nombre);\n}"
+        },
+        {
+          "title": "StringBuilder — concatenación eficiente",
+          "code": "StringBuilder sb = new StringBuilder();\nsb.append(\"Hola\");\nsb.append(\" Mundo\");\nString resultado = sb.toString(); // \"Hola Mundo\"\n// Más eficiente que usar + en bucles"
+        }
+      ]
+    },
+    {
+      "id": "math",
+      "title": "Clase Math",
+      "icon": "🔢",
+      "category": "Fundamentos",
+      "tags": [
+        "math",
+        "matematicas",
+        "pow",
+        "sqrt",
+        "abs",
+        "max",
+        "min",
+        "round",
+        "floor",
+        "ceil",
+        "random",
+        "aleatorio"
+      ],
+      "content": "La clase Math ofrece funciones matemáticas estáticas. No necesitas crear ningún objeto para usarlas.",
+      "subsections": [
+        {
+          "title": "Funciones Math",
+          "code": "Math.pow(2, 10)   // 1024.0 — potencia (2^10)\nMath.sqrt(25)     // 5.0    — raíz cuadrada\nMath.abs(-7)      // 7      — valor absoluto\nMath.max(10, 20)  // 20     — el mayor\nMath.min(10, 20)  // 10     — el menor\nMath.round(3.7)   // 4      — redondeo al más cercano\nMath.floor(3.9)   // 3.0    — redondeo hacia abajo\nMath.ceil(3.1)    // 4.0    — redondeo hacia arriba\nMath.PI           // 3.14159265...\nMath.E            // 2.71828..."
+        },
+        {
+          "title": "Números aleatorios",
+          "code": "// Genera decimal entre 0.0 (incluido) y 1.0 (excluido)\ndouble aleatorio = Math.random();\n\n// Dado de 6 caras (1 al 6):\nint dado = (int)(Math.random() * 6) + 1;\n\n// Entre min y max inclusive:\nint min = 10, max = 50;\nint r = (int)(Math.random() * (max - min + 1)) + min;"
+        }
+      ]
+    },
+    {
+      "id": "if-else",
+      "title": "Condicionales — if / else",
+      "icon": "🔀",
+      "category": "Control de Flujo",
+      "tags": [
+        "if",
+        "else",
+        "else if",
+        "condicional",
+        "ternario",
+        "condicion",
+        "si no"
+      ],
+      "content": "Las sentencias condicionales ejecutan diferentes bloques de código según si una condición es verdadera o falsa.",
+      "subsections": [
+        {
+          "title": "if simple",
+          "code": "int edad = 20;\n\nif (edad >= 18) {\n    System.out.println(\"Eres mayor de edad\");\n}"
+        },
+        {
+          "title": "if — else",
+          "code": "int nota = 4;\n\nif (nota >= 5) {\n    System.out.println(\"Aprobado ✓\");\n} else {\n    System.out.println(\"Suspendido ✗\");\n}"
+        },
+        {
+          "title": "if — else if — else",
+          "code": "int nota = 7;\n\nif (nota >= 9) {\n    System.out.println(\"Sobresaliente\");\n} else if (nota >= 7) {\n    System.out.println(\"Notable\");\n} else if (nota >= 5) {\n    System.out.println(\"Aprobado\");\n} else {\n    System.out.println(\"Suspendido\");\n}"
+        },
+        {
+          "title": "Operador ternario",
+          "code": "// condición ? valor_si_true : valor_si_false\nint edad = 20;\nString estado = (edad >= 18) ? \"Mayor de edad\" : \"Menor\";\nSystem.out.println(estado);\n\nint a = 10, b = 5;\nint mayor = (a > b) ? a : b; // mayor = 10"
+        },
+        {
+          "title": "Condiciones con && y ||",
+          "code": "int x = 15;\n\nif (x > 10 && x < 20) { // Ambas deben ser true\n    System.out.println(\"Entre 10 y 20\");\n}\n\nif (x == 5 || x == 15) { // Al menos una true\n    System.out.println(\"Es 5 o 15\");\n}\n\nboolean activo = false;\nif (!activo) { // Negación\n    System.out.println(\"Inactivo\");\n}"
+        }
+      ]
+    },
+    {
+      "id": "switch",
+      "title": "Switch",
+      "icon": "🔄",
+      "category": "Control de Flujo",
+      "tags": [
+        "switch",
+        "case",
+        "break",
+        "default",
+        "switch expression"
+      ],
+      "content": "El switch es más limpio que varios else-if cuando comparas la misma variable con múltiples valores.",
+      "subsections": [
+        {
+          "title": "Switch clásico",
+          "code": "int dia = 3;\n\nswitch (dia) {\n    case 1:\n        System.out.println(\"Lunes\");\n        break;\n    case 2:\n        System.out.println(\"Martes\");\n        break;\n    case 3:\n        System.out.println(\"Miércoles\");\n        break;\n    default:\n        System.out.println(\"Otro día\");\n        break;\n}"
+        },
+        {
+          "title": "Switch con String",
+          "code": "String color = \"rojo\";\n\nswitch (color) {\n    case \"rojo\":\n        System.out.println(\"Peligro\");\n        break;\n    case \"verde\":\n        System.out.println(\"Seguridad\");\n        break;\n    default:\n        System.out.println(\"Desconocido\");\n}"
+        },
+        {
+          "title": "Switch Expression (Java 14+)",
+          "code": "int dia = 3;\nString nombre = switch (dia) {\n    case 1 -> \"Lunes\";\n    case 2 -> \"Martes\";\n    case 3 -> \"Miércoles\";\n    case 4 -> \"Jueves\";\n    case 5 -> \"Viernes\";\n    default -> \"Fin de semana\";\n};\nSystem.out.println(nombre); // \"Miércoles\""
+        },
+        {
+          "title": "Agrupar casos (fall-through)",
+          "code": "int mes = 4;\nint dias;\n\nswitch (mes) {\n    case 1: case 3: case 5: case 7:\n    case 8: case 10: case 12:\n        dias = 31; break;\n    case 4: case 6: case 9: case 11:\n        dias = 30; break;\n    case 2:\n        dias = 28; break;\n    default:\n        dias = -1;\n}\nSystem.out.println(\"Días: \" + dias); // 30"
+        }
+      ]
+    },
+    {
+      "id": "while",
+      "title": "Bucle While",
+      "icon": "🔁",
+      "category": "Bucles",
+      "tags": [
+        "while",
+        "bucle",
+        "loop",
+        "do while",
+        "repetir",
+        "mientras",
+        "bucle while"
+      ],
+      "content": "El bucle while repite un bloque mientras una condición sea verdadera. Úsalo cuando no sabes cuántas iteraciones necesitas.",
+      "subsections": [
+        {
+          "title": "While básico",
+          "code": "int i = 1;\n\nwhile (i <= 5) {\n    System.out.println(\"Iteración \" + i);\n    i++; // ⚠️ Indispensable — sin esto bucle infinito\n}\n// Imprime: 1, 2, 3, 4, 5"
+        },
+        {
+          "title": "Do-While — ejecuta al menos una vez",
+          "code": "Scanner leer = new Scanner(System.in);\nint numero;\n\ndo {\n    System.out.print(\"Introduce número positivo: \");\n    numero = leer.nextInt();\n} while (numero <= 0); // Comprueba DESPUÉS de ejecutar\n\nSystem.out.println(\"Válido: \" + numero);"
+        },
+        {
+          "title": "Menú con do-while",
+          "code": "Scanner leer = new Scanner(System.in);\nint opcion;\n\ndo {\n    System.out.println(\"1. Opción A\");\n    System.out.println(\"2. Opción B\");\n    System.out.println(\"0. Salir\");\n    System.out.print(\"Elige: \");\n    opcion = leer.nextInt();\n\n    switch (opcion) {\n        case 1: System.out.println(\"Elegiste A\"); break;\n        case 2: System.out.println(\"Elegiste B\"); break;\n        case 0: System.out.println(\"Adiós!\"); break;\n        default: System.out.println(\"Inválido\");\n    }\n} while (opcion != 0);"
+        }
+      ]
+    },
+    {
+      "id": "for",
+      "title": "Bucle For",
+      "icon": "🔃",
+      "category": "Bucles",
+      "tags": [
+        "for",
+        "bucle for",
+        "fori",
+        "for each",
+        "foreach",
+        "anidado",
+        "nested",
+        "loop",
+        "iterar",
+        "recorrer"
+      ],
+      "content": "El bucle for es el más usado cuando sabes cuántas veces debes repetir. También existe el for-each para recorrer colecciones.",
+      "subsections": [
+        {
+          "title": "For básico",
+          "code": "// for (inicio; condición; actualización)\nfor (int i = 0; i < 5; i++) {\n    System.out.println(\"i = \" + i);\n}\n// Imprime: 0, 1, 2, 3, 4\n\n// Hacia atrás:\nfor (int i = 10; i >= 0; i--) {\n    System.out.println(i);\n}\n\n// De 2 en 2:\nfor (int i = 0; i <= 10; i += 2) {\n    System.out.println(i); // 0, 2, 4, 6, 8, 10\n}"
+        },
+        {
+          "title": "Atajo fori en IntelliJ",
+          "code": "// Escribe: fori + Tab  →  genera:\nfor (int i = 0; i < ; i++) {\n    \n}"
+        },
+        {
+          "title": "For anidado (Nested)",
+          "code": "// Tabla de multiplicar:\nfor (int fila = 1; fila <= 3; fila++) {\n    for (int col = 1; col <= 3; col++) {\n        System.out.print(fila + \"x\" + col + \"=\" + (fila*col) + \"\\t\");\n    }\n    System.out.println(); // Nueva línea por fila\n}\n// 1x1=1  1x2=2  1x3=3\n// 2x1=2  2x2=4  2x3=6"
+        },
+        {
+          "title": "For-Each — recorrer colecciones",
+          "code": "int[] numeros = {10, 20, 30, 40, 50};\n\n// Más limpio cuando no necesitas el índice:\nfor (int numero : numeros) {\n    System.out.println(numero);\n}\n\n// Con ArrayList:\nArrayList<String> nombres = new ArrayList<>();\nnombres.add(\"Ana\");\nnombres.add(\"Pedro\");\n\nfor (String nombre : nombres) {\n    System.out.println(nombre);\n}"
+        }
+      ]
+    },
+    {
+      "id": "break-continue",
+      "title": "Break, Continue y Return",
+      "icon": "⏹️",
+      "category": "Bucles",
+      "tags": [
+        "break",
+        "continue",
+        "salir",
+        "bucle",
+        "interrumpir",
+        "saltar",
+        "return"
+      ],
+      "content": "Controlan el flujo dentro de bucles y métodos.",
+      "subsections": [
+        {
+          "title": "break — salir del bucle",
+          "code": "// Sale inmediatamente del bucle\nfor (int i = 0; i < 10; i++) {\n    if (i == 5) break;\n    System.out.println(i); // 0, 1, 2, 3, 4\n}\n\n// Buscar elemento:\nint[] nums = {3, 7, 2, 9, 1};\nboolean encontrado = false;\nfor (int n : nums) {\n    if (n == 9) { encontrado = true; break; }\n}\nSystem.out.println(encontrado ? \"Encontrado\" : \"No encontrado\");"
+        },
+        {
+          "title": "continue — saltar iteración",
+          "code": "// Salta al siguiente ciclo sin ejecutar el resto\nfor (int i = 0; i < 10; i++) {\n    if (i % 2 == 0) continue; // Salta los pares\n    System.out.println(i);    // Solo impares: 1,3,5,7,9\n}"
+        },
+        {
+          "title": "return — salir del método",
+          "code": "public static void main(String[] args) {\n    System.out.println(\"Antes\");\n    if (true) return; // Sale del método completo\n    System.out.println(\"Nunca se ejecuta\");\n}\n\n// En un método con valor de retorno:\npublic static int buscar(int[] arr, int target) {\n    for (int i = 0; i < arr.length; i++) {\n        if (arr[i] == target) return i; // Devuelve el índice\n    }\n    return -1; // No encontrado\n}"
+        }
+      ]
+    },
+    {
+      "id": "arrays",
+      "title": "Arrays (Arreglos)",
+      "icon": "📊",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "array",
+        "arreglo",
+        "arrays",
+        "vector",
+        "indice",
+        "length",
+        "bidimensional",
+        "matriz",
+        "Arrays.sort"
+      ],
+      "content": "Un array es una colección de elementos del mismo tipo con tamaño fijo. El índice empieza en 0.",
+      "subsections": [
+        {
+          "title": "Declarar arrays",
+          "code": "// Con tamaño (valores por defecto: 0/null/false)\nint[] numeros = new int[5];      // [0,0,0,0,0]\nString[] nombres = new String[3]; // [null,null,null]\n\n// Con valores directos:\nint[] edades = {25, 30, 45, 18, 60};\nString[] dias = {\"Lunes\", \"Martes\", \"Miércoles\"};\n\n// Acceder (índice desde 0):\nSystem.out.println(edades[0]); // 25\nSystem.out.println(edades[4]); // 60\nedades[2] = 99; // Modificar"
+        },
+        {
+          "title": "Recorrer arrays",
+          "code": "int[] nums = {10, 20, 30, 40, 50};\n\n// For clásico (cuando necesitas el índice):\nfor (int i = 0; i < nums.length; i++) {\n    System.out.println(\"[\" + i + \"] = \" + nums[i]);\n}\n\n// For-each (más limpio):\nfor (int n : nums) {\n    System.out.println(n);\n}\n// nums.length = 5 (número de elementos)"
+        },
+        {
+          "title": "Arrays bidimensionales (Matrices)",
+          "code": "int[][] tabla = {\n    {1, 2, 3},\n    {4, 5, 6},\n    {7, 8, 9}\n};\n\nSystem.out.println(tabla[1][2]); // 6 (fila 1, col 2)\n\n// Recorrer:\nfor (int i = 0; i < tabla.length; i++) {\n    for (int j = 0; j < tabla[i].length; j++) {\n        System.out.print(tabla[i][j] + \" \");\n    }\n    System.out.println();\n}"
+        },
+        {
+          "title": "Clase Arrays — utilidades",
+          "code": "import java.util.Arrays;\n\nint[] nums = {5, 2, 8, 1, 9};\n\nArrays.sort(nums);  // Ordena: [1,2,5,8,9]\nArrays.fill(nums, 0); // Rellena todo con 0\nSystem.out.println(Arrays.toString(nums)); // [0,0,0,0,0]\nint[] copia = Arrays.copyOf(nums, 3); // Copia primeros 3"
+        }
+      ]
+    },
+    {
+      "id": "metodos",
+      "title": "Métodos",
+      "icon": "⚙️",
+      "category": "Métodos",
+      "tags": [
+        "metodo",
+        "funcion",
+        "void",
+        "return",
+        "parametros",
+        "argumentos",
+        "llamar",
+        "invocar",
+        "sobrecargar",
+        "overloading",
+        "recursividad"
+      ],
+      "content": "Los métodos son bloques de código reutilizables. Dividen el programa en partes más pequeñas y manejables.",
+      "subsections": [
+        {
+          "title": "Estructura de un método",
+          "code": "// [modificador] [tipo_retorno] nombre([parámetros]) { ... }\n\npublic static int sumar(int a, int b) {\n    return a + b;  // Devuelve el resultado\n}\n\n// Llamar al método:\nint resultado = sumar(3, 5); // resultado = 8"
+        },
+        {
+          "title": "Método void — sin retorno",
+          "code": "public static void saludar(String nombre) {\n    System.out.println(\"Hola, \" + nombre + \"!\");\n    // No devuelve nada (void)\n}\n\nsaludar(\"Ana\");   // Hola, Ana!\nsaludar(\"Pedro\"); // Hola, Pedro!"
+        },
+        {
+          "title": "Métodos con retorno",
+          "code": "public static double areaCirculo(double radio) {\n    return Math.PI * Math.pow(radio, 2);\n}\n\npublic static boolean esPar(int numero) {\n    return numero % 2 == 0;\n}\n\npublic static String saludo(String nombre) {\n    return \"Hola, \" + nombre;\n}\n\n// Uso:\ndouble area = areaCirculo(5.0);   // 78.539...\nboolean par = esPar(4);           // true\nString msg = saludo(\"Ana\");       // \"Hola, Ana\""
+        },
+        {
+          "title": "Sobrecarga de métodos (Overloading)",
+          "code": "// Mismo nombre, distintos parámetros — Java elige el correcto\npublic static int sumar(int a, int b)       { return a + b; }\npublic static double sumar(double a, double b) { return a + b; }\npublic static int sumar(int a, int b, int c) { return a+b+c; }\n\nsumar(2, 3);      // → usa primer método → 5\nsumar(1.5, 2.5);  // → usa segundo      → 4.0\nsumar(1, 2, 3);   // → usa tercero      → 6"
+        },
+        {
+          "title": "Ámbito de variables (Scope)",
+          "code": "public static void ejemplo() {\n    int x = 10; // Solo existe en este método\n    \n    if (true) {\n        int y = 20; // Solo existe dentro de este if\n        System.out.println(x); // OK\n        System.out.println(y); // OK\n    }\n    // System.out.println(y); // ERROR — y no existe aquí\n}"
+        },
+        {
+          "title": "Recursividad",
+          "code": "// Un método que se llama a sí mismo\n// SIEMPRE necesita un caso base para terminar\npublic static int factorial(int n) {\n    if (n <= 1) return 1;           // Caso base\n    return n * factorial(n - 1);   // Llamada recursiva\n}\n\n// factorial(5) = 5 * 4 * 3 * 2 * 1 = 120\nSystem.out.println(factorial(5));"
+        }
+      ]
+    },
+    {
+      "id": "clases-objetos",
+      "title": "Clases y Objetos (POO)",
+      "icon": "🏛️",
+      "category": "POO",
+      "tags": [
+        "clase",
+        "objeto",
+        "poo",
+        "oop",
+        "new",
+        "instancia",
+        "atributo",
+        "propiedad",
+        "orientado a objetos"
+      ],
+      "content": "La POO modela el mundo real con clases (moldes) y objetos (instancias de esos moldes).",
+      "subsections": [
+        {
+          "title": "Crear una clase",
+          "code": "// Archivo: Persona.java\npublic class Persona {\n    // Atributos — características del objeto\n    String nombre;\n    int edad;\n    String email;\n    \n    // Métodos — comportamientos del objeto\n    public void saludar() {\n        System.out.println(\"Hola, soy \" + nombre);\n    }\n    \n    public void cumpleaños() {\n        edad++;\n        System.out.println(nombre + \" ahora tiene \" + edad + \" años\");\n    }\n}"
+        },
+        {
+          "title": "Crear y usar objetos",
+          "code": "// Archivo: Main.java\npublic class Main {\n    public static void main(String[] args) {\n        // Crear objetos con 'new'\n        Persona p1 = new Persona();\n        p1.nombre = \"Ana\";\n        p1.edad = 25;\n        \n        Persona p2 = new Persona();\n        p2.nombre = \"Pedro\";\n        p2.edad = 30;\n        \n        p1.saludar();     // Hola, soy Ana\n        p2.cumpleaños();  // Pedro ahora tiene 31 años\n    }\n}"
+        }
+      ]
+    },
+    {
+      "id": "constructores",
+      "title": "Constructores",
+      "icon": "🔨",
+      "category": "POO",
+      "tags": [
+        "constructor",
+        "new",
+        "this",
+        "inicializar",
+        "crear objeto"
+      ],
+      "content": "El constructor se llama automáticamente al crear un objeto con 'new'. Inicializa los atributos.",
+      "subsections": [
+        {
+          "title": "Constructor básico",
+          "code": "public class Persona {\n    String nombre;\n    int edad;\n    \n    // Constructor: mismo nombre que la clase, sin tipo de retorno\n    public Persona(String nombre, int edad) {\n        this.nombre = nombre; // 'this' = atributo del objeto\n        this.edad = edad;\n    }\n    \n    public void mostrar() {\n        System.out.println(nombre + \" (\" + edad + \" años)\");\n    }\n}\n\n// Uso:\nPersona p = new Persona(\"Ana\", 25);\np.mostrar(); // Ana (25 años)"
+        },
+        {
+          "title": "Múltiples constructores",
+          "code": "public class Persona {\n    String nombre;\n    int edad;\n    String email;\n    \n    public Persona() {                      // Sin parámetros\n        nombre = \"Desconocido\"; edad = 0;\n    }\n    \n    public Persona(String nombre) {         // Solo nombre\n        this.nombre = nombre; this.edad = 0;\n    }\n    \n    public Persona(String nombre, int edad, String email) { // Completo\n        this.nombre = nombre;\n        this.edad = edad;\n        this.email = email;\n    }\n}\n\nPersona p1 = new Persona();\nPersona p2 = new Persona(\"Ana\");\nPersona p3 = new Persona(\"Pedro\", 30, \"pedro@mail.com\");"
+        }
+      ]
+    },
+    {
+      "id": "encapsulacion",
+      "title": "Encapsulación — Getters y Setters",
+      "icon": "🔒",
+      "category": "POO",
+      "tags": [
+        "encapsulacion",
+        "getter",
+        "setter",
+        "private",
+        "public",
+        "protected",
+        "modificadores",
+        "acceso"
+      ],
+      "content": "La encapsulación protege los datos del objeto. Atributos private, acceso mediante getters y setters.",
+      "subsections": [
+        {
+          "title": "Modificadores de acceso",
+          "code": "public class Persona {\n    private String nombre;  // Solo dentro de esta clase\n    protected int edad;     // Esta clase y subclases\n    public String ciudad;   // Accesible desde cualquier lugar\n    String email;           // Sin modificador = package\n}"
+        },
+        {
+          "title": "Getters y Setters",
+          "code": "public class Persona {\n    private String nombre;\n    private int edad;\n    \n    // Getter — devuelve el valor\n    public String getNombre() { return nombre; }\n    public int getEdad()      { return edad; }\n    \n    // Setter — establece el valor (con validación opcional)\n    public void setNombre(String nombre) {\n        if (nombre != null && !nombre.isEmpty()) {\n            this.nombre = nombre;\n        }\n    }\n    \n    public void setEdad(int edad) {\n        if (edad >= 0 && edad <= 150) {\n            this.edad = edad;\n        }\n    }\n}\n\nPersona p = new Persona();\np.setNombre(\"Ana\");\np.setEdad(25);\nSystem.out.println(p.getNombre()); // Ana"
+        }
+      ]
+    },
+    {
+      "id": "herencia",
+      "title": "Herencia",
+      "icon": "🧬",
+      "category": "POO",
+      "tags": [
+        "herencia",
+        "extends",
+        "super",
+        "subclase",
+        "superclase",
+        "padre",
+        "hijo",
+        "override",
+        "sobreescribir",
+        "polimorfismo"
+      ],
+      "content": "La herencia permite crear nuevas clases basadas en otras ya existentes, reutilizando su código.",
+      "subsections": [
+        {
+          "title": "extends — Herencia básica",
+          "code": "// Clase padre\npublic class Animal {\n    String nombre;\n    \n    public Animal(String nombre) { this.nombre = nombre; }\n    \n    public void comer() {\n        System.out.println(nombre + \" come\");\n    }\n}\n\n// Clase hija — hereda todo de Animal\npublic class Perro extends Animal {\n    String raza;\n    \n    public Perro(String nombre, String raza) {\n        super(nombre); // Llama al constructor del padre\n        this.raza = raza;\n    }\n    \n    public void ladrar() {\n        System.out.println(nombre + \": ¡Guau!\");\n    }\n}\n\nPerro p = new Perro(\"Rex\", \"Labrador\");\np.comer();  // Heredado de Animal\np.ladrar(); // Propio de Perro"
+        },
+        {
+          "title": "@Override — Sobreescribir métodos",
+          "code": "public class Animal {\n    public void sonido() {\n        System.out.println(\"Sonido genérico\");\n    }\n}\n\npublic class Gato extends Animal {\n    @Override\n    public void sonido() { System.out.println(\"¡Miau!\"); }\n}\n\npublic class Perro extends Animal {\n    @Override\n    public void sonido() { System.out.println(\"¡Guau!\"); }\n}\n\n// Polimorfismo — cada objeto llama SU método:\nAnimal[] animales = { new Gato(), new Perro(), new Gato() };\nfor (Animal a : animales) {\n    a.sonido(); // Miau, Guau, Miau\n}"
+        }
+      ]
+    },
+    {
+      "id": "abstracto",
+      "title": "Clases Abstractas e Interfaces",
+      "icon": "🎭",
+      "category": "POO",
+      "tags": [
+        "abstracto",
+        "abstract",
+        "interface",
+        "implements",
+        "polimorfismo"
+      ],
+      "content": "Las clases abstractas e interfaces definen contratos. Una clase abstracta no se puede instanciar directamente.",
+      "subsections": [
+        {
+          "title": "Clase abstracta",
+          "code": "public abstract class Figura {\n    String color;\n    \n    public Figura(String color) { this.color = color; }\n    \n    // Método abstracto — sin código, OBLIGATORIO implementar en subclases\n    public abstract double calcularArea();\n    \n    // Método normal — con código, se hereda\n    public void mostrar() {\n        System.out.println(\"Área: \" + calcularArea());\n    }\n}\n\npublic class Circulo extends Figura {\n    double radio;\n    \n    public Circulo(String color, double radio) {\n        super(color);\n        this.radio = radio;\n    }\n    \n    @Override\n    public double calcularArea() {\n        return Math.PI * radio * radio;\n    }\n}\n\nCirculo c = new Circulo(\"rojo\", 5);\nc.mostrar(); // Área: 78.539..."
+        },
+        {
+          "title": "Interface",
+          "code": "// Define un contrato: qué debe hacer, no cómo\npublic interface Volador {\n    void volar();\n    double getAlturaMaxima();\n}\n\npublic interface Nadador {\n    void nadar();\n}\n\n// Una clase puede implementar MÚLTIPLES interfaces\npublic class Pato implements Volador, Nadador {\n    @Override\n    public void volar()  { System.out.println(\"El pato vuela\"); }\n    \n    @Override\n    public double getAlturaMaxima() { return 100.0; }\n    \n    @Override\n    public void nadar() { System.out.println(\"El pato nada\"); }\n}"
+        }
+      ]
+    },
+    {
+      "id": "trycatch",
+      "title": "Try-Catch — Manejo de Excepciones",
+      "icon": "🛡️",
+      "category": "Errores",
+      "tags": [
+        "try",
+        "catch",
+        "finally",
+        "exception",
+        "excepcion",
+        "error",
+        "throw",
+        "throws",
+        "trycatch",
+        "manejo errores",
+        "depuracion"
+      ],
+      "content": "Las excepciones son errores en tiempo de ejecución. Con try-catch los capturamos y manejamos sin que el programa falle.",
+      "subsections": [
+        {
+          "title": "Try-Catch básico",
+          "code": "try {\n    int resultado = 10 / 0; // ← ArithmeticException\n    System.out.println(resultado);\n} catch (ArithmeticException e) {\n    System.out.println(\"Error: \" + e.getMessage()); // / by zero\n}\nSystem.out.println(\"El programa continúa...\");"
+        },
+        {
+          "title": "Múltiples catch",
+          "code": "try {\n    int n = Integer.parseInt(\"abc\"); // NumberFormatException\n    int r = 100 / n;                  // ArithmeticException\n    System.out.println(r);\n    \n} catch (NumberFormatException e) {\n    System.out.println(\"Eso no es un número\");\n} catch (ArithmeticException e) {\n    System.out.println(\"No dividas entre cero\");\n} catch (Exception e) {\n    System.out.println(\"Error: \" + e.getMessage()); // Captura todo\n}"
+        },
+        {
+          "title": "Finally",
+          "code": "try {\n    System.out.println(\"Intentando...\");\n    int x = 5 / 0;\n} catch (ArithmeticException e) {\n    System.out.println(\"Error capturado\");\n} finally {\n    System.out.println(\"Se ejecuta SIEMPRE\"); // Haya error o no\n}"
+        },
+        {
+          "title": "Múltiples excepciones en un catch",
+          "code": "try {\n    // código\n} catch (NumberFormatException | ArithmeticException e) {\n    System.out.println(\"Error: \" + e.getMessage());\n}"
+        },
+        {
+          "title": "Lanzar excepciones — throw",
+          "code": "public static int dividir(int a, int b) {\n    if (b == 0) {\n        throw new ArithmeticException(\"No se puede dividir entre cero\");\n    }\n    return a / b;\n}\n\ntry {\n    int r = dividir(10, 0);\n} catch (ArithmeticException e) {\n    System.out.println(e.getMessage());\n}"
+        },
+        {
+          "title": "Excepciones comunes",
+          "list": [
+            "NullPointerException — se usó un objeto null",
+            "ArrayIndexOutOfBoundsException — índice fuera del rango",
+            "NumberFormatException — String no convertible a número",
+            "ArithmeticException — error aritmético (ej: /0)",
+            "ClassCastException — conversión de tipos inválida",
+            "IllegalArgumentException — argumento no válido",
+            "StackOverflowError — recursión infinita"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "arraylist",
+      "title": "ArrayList y Colecciones",
+      "icon": "📋",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "arraylist",
+        "lista",
+        "list",
+        "colecciones",
+        "add",
+        "remove",
+        "get",
+        "size",
+        "hashmap",
+        "hashset",
+        "map",
+        "iterator"
+      ],
+      "content": "ArrayList tiene tamaño dinámico a diferencia de los arrays fijos. HashMap almacena pares clave-valor.",
+      "subsections": [
+        {
+          "title": "ArrayList",
+          "code": "import java.util.ArrayList;\n\nArrayList<String> nombres = new ArrayList<>();\n\nnombres.add(\"Ana\");            // Añadir al final\nnombres.add(1, \"María\");       // Insertar en posición 1\nSystem.out.println(nombres.get(0));    // Ana\nSystem.out.println(nombres.size());    // tamaño\nnombres.set(0, \"Sofía\");       // Modificar\nnombres.remove(\"Ana\");         // Eliminar por valor\nnombres.remove(0);             // Eliminar por índice\nnombres.contains(\"María\");     // true/false\nnombres.indexOf(\"María\");      // posición o -1\nnombres.clear();               // Vaciar"
+        },
+        {
+          "title": "Recorrer ArrayList",
+          "code": "ArrayList<Integer> nums = new ArrayList<>();\nnums.add(10); nums.add(20); nums.add(30);\n\n// For-each (recomendado):\nfor (int n : nums) {\n    System.out.println(n);\n}\n\n// For clásico:\nfor (int i = 0; i < nums.size(); i++) {\n    System.out.println(nums.get(i));\n}"
+        },
+        {
+          "title": "HashMap — clave/valor",
+          "code": "import java.util.HashMap;\n\nHashMap<String, Integer> edades = new HashMap<>();\nedades.put(\"Ana\", 25);\nedades.put(\"Pedro\", 30);\n\nSystem.out.println(edades.get(\"Ana\"));       // 25\nSystem.out.println(edades.containsKey(\"Pedro\")); // true\nedades.remove(\"Pedro\");\n\n// Recorrer:\nfor (String clave : edades.keySet()) {\n    System.out.println(clave + \": \" + edades.get(clave));\n}"
+        },
+        {
+          "title": "HashSet — sin duplicados",
+          "code": "import java.util.HashSet;\n\nHashSet<String> ciudades = new HashSet<>();\nciudades.add(\"Madrid\");\nciudades.add(\"Barcelona\");\nciudades.add(\"Madrid\"); // NO se añade — ya existe!\n\nSystem.out.println(ciudades.size()); // 2\nfor (String c : ciudades) System.out.println(c);"
+        }
+      ]
+    },
+    {
+      "id": "enum",
+      "title": "Enumeraciones — Enum",
+      "icon": "📌",
+      "category": "POO",
+      "tags": [
+        "enum",
+        "enumeracion",
+        "constantes",
+        "valores fijos"
+      ],
+      "content": "Los enums definen un conjunto fijo y nombrado de constantes. Perfectos para estados, días, opciones.",
+      "subsections": [
+        {
+          "title": "Enum básico",
+          "code": "public enum DiaSemana {\n    LUNES, MARTES, MIERCOLES, JUEVES, VIERNES, SABADO, DOMINGO\n}\n\nDiaSemana dia = DiaSemana.MIERCOLES;\n\nswitch (dia) {\n    case SABADO:\n    case DOMINGO:\n        System.out.println(\"Fin de semana\");\n        break;\n    default:\n        System.out.println(\"Día laborable\");\n}"
+        }
+      ]
+    },
+    {
+      "id": "lambda",
+      "title": "Expresiones Lambda",
+      "icon": "λ",
+      "category": "Avanzado",
+      "tags": [
+        "lambda",
+        "funcional",
+        "stream",
+        "forEach",
+        "filter",
+        "arrow",
+        "flecha"
+      ],
+      "content": "Las lambdas (Java 8+) permiten escribir funciones anónimas de forma compacta con la sintaxis ->.",
+      "subsections": [
+        {
+          "title": "Sintaxis lambda",
+          "code": "// (parámetros) -> { cuerpo }\n\n// Sin parámetros:\nRunnable r = () -> System.out.println(\"Hola\");\nr.run();\n\n// Con parámetros — forEach con lambda:\nArrayList<String> nombres = new ArrayList<>();\nnombres.add(\"Ana\"); nombres.add(\"Pedro\");\nnombres.forEach(nombre -> System.out.println(nombre));\n\n// Ordenar con lambda:\nimport java.util.Collections;\nCollections.sort(nombres, (a, b) -> a.compareTo(b));"
+        },
+        {
+          "title": "Stream + filter",
+          "code": "ArrayList<String> nombres = new ArrayList<>();\nnombres.add(\"Ana\"); nombres.add(\"Alberto\"); nombres.add(\"Pedro\");\n\n// Filtrar los que empiezan por \"A\":\nnombres.stream()\n    .filter(n -> n.startsWith(\"A\"))\n    .forEach(System.out::println);\n// → Ana\n// → Alberto"
+        }
+      ]
+    },
+    {
+      "id": "ficheros",
+      "title": "Manejo de Ficheros",
+      "icon": "📁",
+      "category": "Ficheros",
+      "tags": [
+        "ficheros",
+        "archivos",
+        "file",
+        "leer archivo",
+        "escribir archivo",
+        "crear archivo",
+        "eliminar archivo",
+        "filewriter",
+        "scanner file"
+      ],
+      "content": "Java permite crear, leer, escribir y eliminar ficheros con las clases del paquete java.io.",
+      "subsections": [
+        {
+          "title": "Crear fichero",
+          "code": "import java.io.File;\nimport java.io.IOException;\n\nFile archivo = new File(\"datos.txt\");\n\ntry {\n    if (archivo.createNewFile()) {\n        System.out.println(\"Archivo creado\");\n    } else {\n        System.out.println(\"Ya existe\");\n    }\n} catch (IOException e) {\n    System.out.println(\"Error: \" + e.getMessage());\n}"
+        },
+        {
+          "title": "Escribir en fichero",
+          "code": "import java.io.FileWriter;\nimport java.io.IOException;\n\ntry (FileWriter fw = new FileWriter(\"datos.txt\")) {\n    fw.write(\"Hola Mundo\\n\");\n    fw.write(\"Segunda línea\");\n    System.out.println(\"Escrito OK\");\n} catch (IOException e) {\n    System.out.println(\"Error: \" + e.getMessage());\n}"
+        },
+        {
+          "title": "Leer fichero",
+          "code": "import java.io.File;\nimport java.util.Scanner;\n\ntry {\n    File archivo = new File(\"datos.txt\");\n    Scanner lector = new Scanner(archivo);\n    \n    while (lector.hasNextLine()) {\n        System.out.println(lector.nextLine());\n    }\n    lector.close();\n    \n} catch (Exception e) {\n    System.out.println(\"Archivo no encontrado\");\n}"
+        },
+        {
+          "title": "Eliminar fichero",
+          "code": "File archivo = new File(\"datos.txt\");\n\nif (archivo.delete()) {\n    System.out.println(\"Eliminado: \" + archivo.getName());\n} else {\n    System.out.println(\"No se pudo eliminar\");\n}"
+        }
+      ]
+    },
+    {
+      "id": "threads",
+      "title": "Hilos (Threads)",
+      "icon": "🧵",
+      "category": "Avanzado",
+      "tags": [
+        "thread",
+        "hilo",
+        "concurrencia",
+        "runnable",
+        "start",
+        "sleep",
+        "paralelismo"
+      ],
+      "content": "Los hilos permiten ejecutar múltiples tareas simultáneamente.",
+      "subsections": [
+        {
+          "title": "Crear hilos",
+          "code": "// Opción 1: Implementar Runnable (recomendado)\npublic class MiTarea implements Runnable {\n    @Override\n    public void run() {\n        System.out.println(\"Ejecutando: \" + Thread.currentThread().getName());\n    }\n}\n\nThread t = new Thread(new MiTarea());\nt.start();\n\n// Opción 2: Lambda (más conciso)\nnew Thread(() -> System.out.println(\"Lambda hilo\")).start();\n\n// Thread.sleep — pausar\ntry {\n    Thread.sleep(1000); // Pausa 1 segundo\n} catch (InterruptedException e) { e.printStackTrace(); }"
+        }
+      ]
+    },
+    {
+      "id": "genericos",
+      "title": "Genéricos",
+      "icon": "🔧",
+      "category": "Avanzado",
+      "tags": [
+        "genericos",
+        "generics",
+        "tipo parametrizado",
+        "T",
+        "E"
+      ],
+      "content": "Los genéricos permiten escribir clases y métodos que funcionan con cualquier tipo de dato.",
+      "subsections": [
+        {
+          "title": "Clase genérica",
+          "code": "public class Caja<T> {\n    private T contenido;\n    \n    public void guardar(T item) { contenido = item; }\n    public T sacar()            { return contenido; }\n}\n\nCaja<String> cajaTexto = new Caja<>();\ncajaTexto.guardar(\"Hola\");\nString txt = cajaTexto.sacar(); // \"Hola\"\n\nCaja<Integer> cajaNum = new Caja<>();\ncajaNum.guardar(42);\nint num = cajaNum.sacar(); // 42"
+        }
+      ]
+    },
+    {
+      "id": "genericos-avanzado",
+      "title": "Genéricos Avanzados",
+      "icon": "🔬",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "genericos",
+        "bounded",
+        "wildcard",
+        "T extends",
+        "Comparable",
+        "tipo parametrizado",
+        "par",
+        "metodo generico",
+        "clase generica"
+      ],
+      "content": "Los genéricos permiten crear clases y métodos que funcionan con cualquier tipo, con total seguridad en compilación. Son la base del Framework de Colecciones de Java.",
+      "subsections": [
+        {
+          "title": "Por qué usar genéricos",
+          "explanation": "Sin genéricos, una colección acepta 'cualquier cosa' y los errores de tipo aparecen en ejecución (ClassCastException). Con genéricos, el tipo queda fijado en compilación: menos casts, más seguridad.",
+          "code": "// SIN genéricos — problema\nArrayList lista = new ArrayList();\nlista.add(\"hola\");\nlista.add(10);\nString s = (String) lista.get(1); // ClassCastException en ejecución!\n\n// CON genéricos — solución\nArrayList<String> lista = new ArrayList<>();\nlista.add(\"hola\");\n// lista.add(10); // ERROR DE COMPILACIÓN — detectado antes\nString s = lista.get(0);           // sin cast necesario"
+        },
+        {
+          "title": "Clase genérica con un tipo",
+          "explanation": "T es un 'tipo parámetro': funciona como una plantilla. Al crear la clase, T se sustituye por el tipo real. Por convención: T=Type, E=Element, K=Key, V=Value, N=Number.",
+          "code": "public class Caja<T> {\n    private T contenido;\n\n    public void guardar(T valor) {\n        contenido = valor;\n    }\n    public T sacar() {\n        return contenido;\n    }\n}\n\n// Uso\nCaja<String> c1 = new Caja<>();\nc1.guardar(\"DAM\");\nString x = c1.sacar();   // \"DAM\"\n\nCaja<Integer> c2 = new Caja<>();\nc2.guardar(10);\nint n = c2.sacar();      // 10"
+        },
+        {
+          "title": "Clase genérica con 2 tipos (Par<K,V>)",
+          "explanation": "Se pueden declarar varios tipos parámetro separados por comas. El ejemplo clásico es un par clave/valor.",
+          "code": "public class Par<K, V> {\n    private K clave;\n    private V valor;\n\n    public Par(K clave, V valor) {\n        this.clave = clave;\n        this.valor = valor;\n    }\n    public K getClave() { return clave; }\n    public V getValor() { return valor; }\n}\n\n// Uso\nPar<String, Integer> p = new Par<>(\"Ana\", 20);\nString nombre = p.getClave();  // \"Ana\"\nint edad = p.getValor();       // 20"
+        },
+        {
+          "title": "Método genérico",
+          "explanation": "Un método puede introducir su propio tipo parámetro aunque esté en una clase normal. La sintaxis pone <T> antes del tipo de retorno.",
+          "code": "// Método genérico estático\npublic static <T> void imprimir(T dato) {\n    System.out.println(dato);\n}\n\n// Un solo método sirve para cualquier tipo\nimprimir(\"Hola\");  // String\nimprimir(10);      // Integer\nimprimir(3.14);    // Double\n\n// Otro ejemplo: primero elemento de un array\npublic static <T> T primero(T[] array) {\n    return array[0];\n}"
+        },
+        {
+          "title": "Límites de tipo (bounded generics)",
+          "explanation": "Con 'extends' restringimos qué tipos acepta T. Fundamental para usar métodos de la clase límite (compareTo, etc.).",
+          "code": "// Solo acepta Number o subclases (Integer, Double...)\npublic class CajaNumeros<T extends Number> {\n    private T valor;\n    public CajaNumeros(T v) { valor = v; }\n    public double enDouble() { return valor.doubleValue(); }\n}\n\n// Método genérico con límite Comparable\npublic static <T extends Comparable<T>> T max(T a, T b) {\n    return (a.compareTo(b) >= 0) ? a : b;\n}\n\n// Uso\nSystem.out.println(max(3, 7));       // 7\nSystem.out.println(max(\"Ana\", \"Bea\")); // Bea"
+        },
+        {
+          "title": "Clase genérica Repositorio<T> (examen)",
+          "explanation": "Patrón típico de examen: una clase genérica que envuelve un ArrayList<T> y expone operaciones básicas (agregar, eliminar, buscar). Funciona con CUALQUIER tipo gracias al parámetro T.",
+          "code": "import java.util.ArrayList;\n\npublic class Repositorio<T> {\n    private ArrayList<T> elementos;\n\n    public Repositorio() {\n        elementos = new ArrayList<>();\n    }\n\n    // Añadir elemento\n    public void agregar(T elemento) {\n        elementos.add(elemento);\n    }\n\n    // Eliminar — usa equals() internamente\n    public boolean eliminar(T elemento) {\n        return elementos.remove(elemento);\n    }\n\n    // Buscar por índice (null si inválido)\n    public T buscarPorIndice(int i) {\n        if (i < 0 || i >= elementos.size()) return null;\n        return elementos.get(i);\n    }\n\n    // Total elementos\n    public int totalElementos() {\n        return elementos.size();\n    }\n\n    // Mostrar todos\n    public void mostrarTodos() {\n        for (T e : elementos) {\n            System.out.println(e);\n        }\n    }\n}\n\n// Uso\nRepositorio<String> repo = new Repositorio<>();\nrepo.agregar(\"Ana\");\nrepo.agregar(\"Luis\");\nrepo.mostrarTodos();           // Ana\\nLuis\nSystem.out.println(repo.totalElementos()); // 2\nrepo.eliminar(\"Ana\");\nSystem.out.println(repo.buscarPorIndice(0)); // Luis"
+        },
+        {
+          "title": "Método genérico mostrarMayor (examen)",
+          "explanation": "Patrón de examen: método genérico estático que compara dos valores del mismo tipo usando compareTo(). T debe implementar Comparable<T>.",
+          "code": "// Firma exacta del examen\npublic static <T extends Comparable<T>> void mostrarMayor(T a, T b) {\n    int resultado = a.compareTo(b);\n    if (resultado > 0) {\n        System.out.println(\"Mayor: \" + a);\n    } else if (resultado < 0) {\n        System.out.println(\"Mayor: \" + b);\n    } else {\n        System.out.println(\"Son iguales: \" + a);\n    }\n}\n\n// Uso con distintos tipos\nmostrarMayor(\"Ana\", \"Bea\");  // Mayor: Bea\nmostrarMayor(10, 3);         // Mayor: 10\nmostrarMayor(5, 5);          // Son iguales: 5\n\n// Para usarlo con Veterinario, esa clase debe implementar Comparable<Veterinario>\n// comparando por salario calculado (ver sección Comparable)"
+        }
+      ]
+    },
+    {
+      "id": "colecciones",
+      "title": "Colecciones — List, Set y Map",
+      "icon": "🗃️",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "colecciones",
+        "list",
+        "set",
+        "map",
+        "arraylist",
+        "hashset",
+        "hashmap",
+        "linkedhashmap",
+        "treeset",
+        "treemap",
+        "collections framework",
+        "duplicados",
+        "clave valor"
+      ],
+      "content": "El Framework de Colecciones de Java proporciona estructuras de datos listas para usar. Las tres interfaces principales son List (ordenada, permite duplicados), Set (sin duplicados) y Map (clave-valor).",
+      "subsections": [
+        {
+          "title": "Jerarquía del Framework",
+          "explanation": "Collection es la interfaz raíz de la que heredan List y Set. Map es independiente (no hereda de Collection). Todas están en java.util.",
+          "code": "// Jerarquía resumida:\n// Collection\n//   ├── List  → ArrayList, LinkedList\n//   └── Set   → HashSet, LinkedHashSet, TreeSet\n// Map (independiente)\n//   → HashMap, LinkedHashMap, TreeMap\n\nimport java.util.*;"
+        },
+        {
+          "title": "List — ArrayList (acceso por índice)",
+          "explanation": "ArrayList mantiene el orden de inserción y permite duplicados. Acceso O(1) por índice. Es la implementación de List más usada en la práctica.",
+          "code": "List<String> lista = new ArrayList<>();\n\nlista.add(\"Ana\");       // añadir al final\nlista.add(\"Luis\");\nlista.add(0, \"Zoe\");   // insertar en posición 0\n\nSystem.out.println(lista.get(0));      // Zoe\nSystem.out.println(lista.size());      // 3\nSystem.out.println(lista.contains(\"Ana\")); // true\n\nlista.remove(\"Luis\");   // eliminar por objeto\nlista.remove(0);        // eliminar por índice\n\n// Recorrer\nfor (String s : lista) {\n    System.out.println(s);\n}"
+        },
+        {
+          "title": "Set — HashSet (sin duplicados)",
+          "explanation": "Un Set no permite duplicados. HashSet es el más rápido (basado en hash) pero no garantiza orden. Para que funcione correctamente con objetos propios, la clase debe sobreescribir equals() y hashCode().",
+          "code": "Set<String> conjunto = new HashSet<>();\n\nconjunto.add(\"Ana\");\nconjunto.add(\"Luis\");\nconjunto.add(\"Ana\");  // NO se añade (duplicado)\n\nSystem.out.println(conjunto.size());        // 2\nSystem.out.println(conjunto.contains(\"Ana\")); // true\n\n// LinkedHashSet — mantiene orden de inserción\nSet<String> ordenado = new LinkedHashSet<>();\n\n// TreeSet — orden natural (alfabético para Strings)\nSet<String> arbol = new TreeSet<>();\narbol.add(\"Zoe\");\narbol.add(\"Ana\");\narbol.add(\"Luis\");\nSystem.out.println(arbol); // [Ana, Luis, Zoe]"
+        },
+        {
+          "title": "Map — HashMap (clave-valor)",
+          "explanation": "Un Map asocia cada clave a un valor. La clave es única; el valor puede repetirse. HashMap es el más rápido. Ideal para búsquedas por identificador (DNI, nombre, código).",
+          "code": "Map<String, Integer> mapa = new HashMap<>();\n\nmapa.put(\"Ana\", 90);\nmapa.put(\"Luis\", 75);\nmapa.put(\"Zoe\", 88);\nmapa.put(\"Ana\", 95);  // sobreescribe el valor de \"Ana\"\n\nSystem.out.println(mapa.get(\"Ana\"));        // 95\nSystem.out.println(mapa.containsKey(\"Luis\")); // true\nSystem.out.println(mapa.size());             // 3\n\nmapa.remove(\"Luis\");\n\n// getOrDefault — evita NullPointerException\nint nota = mapa.getOrDefault(\"Pedro\", 0);   // 0 (no existe)\n\n// putIfAbsent — solo añade si la clave no existe\nmapa.putIfAbsent(\"Zoe\", 50);  // no cambia, ya existe"
+        },
+        {
+          "title": "Recorrer un Map",
+          "explanation": "Hay tres formas de iterar un Map: por claves (keySet), por valores (values) o por entradas clave+valor (entrySet). La forma con entrySet es la más eficiente y recomendada.",
+          "code": "Map<String, Integer> mapa = new HashMap<>();\nmapa.put(\"Ana\", 90);\nmapa.put(\"Luis\", 75);\n\n// 1) Solo claves\nfor (String clave : mapa.keySet()) {\n    System.out.println(clave);\n}\n\n// 2) Solo valores\nfor (int valor : mapa.values()) {\n    System.out.println(valor);\n}\n\n// 3) Clave + valor (recomendado con entrySet)\nfor (Map.Entry<String, Integer> e : mapa.entrySet()) {\n    System.out.println(e.getKey() + \" -> \" + e.getValue());\n}"
+        },
+        {
+          "title": "GestorClinica con Map y Set (examen)",
+          "explanation": "Patrón típico de examen: usar un HashMap para búsquedas rápidas por nombre/clave, y un HashSet para almacenar valores únicos (especies, categorías). El Set elimina duplicados automáticamente.",
+          "code": "import java.util.*;\n\npublic class GestorClinica {\n    // Clave: nombre de la mascota → valor: objeto Mascota\n    private Map<String, Mascota> mascotas = new HashMap<>();\n    // Solo almacena especies únicas\n    private Set<String> especies = new HashSet<>();\n\n    public void registrarMascota(Mascota m) {\n        mascotas.put(m.getNombre(), m);\n        especies.add(m.getEspecie());  // duplicados ignorados\n    }\n\n    public Mascota buscarPorNombre(String nombre) {\n        return mascotas.get(nombre);  // null si no existe\n    }\n\n    public void mostrarEspecies() {\n        System.out.println(\"Especies: \" + especies);\n    }\n\n    public void mostrarTodasLasMascotas() {\n        for (Map.Entry<String, Mascota> e : mascotas.entrySet()) {\n            System.out.println(e.getKey() + \" -> \" + e.getValue());\n        }\n    }\n}\n\n// En main:\nGestorClinica gc = new GestorClinica();\ngc.registrarMascota(new Mascota(\"Rex\", \"Perro\", 3, p1));\ngc.registrarMascota(new Mascota(\"Misi\", \"Gato\", 1, p2));\ngc.registrarMascota(new Mascota(\"Tobi\", \"Perro\", 5, p3));\ngc.mostrarEspecies();         // [Perro, Gato]  (sin duplicados)\nMascota m = gc.buscarPorNombre(\"Rex\");  // devuelve el objeto\nMascota nula = gc.buscarPorNombre(\"Fido\"); // null\nif (nula == null) System.out.println(\"No encontrada\");"
+        },
+        {
+          "title": "List vs Set vs Map — cuándo usar cada uno",
+          "explanation": "Elegir la estructura adecuada es fundamental. La regla rápida: necesito orden/posición → List; no quiero duplicados → Set; busco por clave → Map.",
+          "code": "// LIST → cuando el ORDEN importa o necesitas acceso por índice\nList<String> historial = new ArrayList<>();  // mensajes en orden\n\n// SET → cuando NO deben existir DUPLICADOS\nSet<String> dniAlumnos = new HashSet<>();     // DNIs únicos\n\n// MAP → cuando necesitas buscar por CLAVE\nMap<String, Alumno> porDni = new HashMap<>(); // dni -> alumno\n\n/*\n ┌──────────┬──────────┬───────────┬───────────────┐\n │          │ Orden    │ Duplicados│ Acceso        │\n ├──────────┼──────────┼───────────┼───────────────┤\n │ ArrayList│ sí       │ sí        │ índice O(1)   │\n │ HashSet  │ no       │ no        │ hash O(1)     │\n │ TreeSet  │ natural  │ no        │ árbol O(log n)│\n │ HashMap  │ no       │ clave: no │ hash O(1)     │\n └──────────┴──────────┴───────────┴───────────────┘\n*/"
+        }
+      ]
+    },
+    {
+      "id": "comparable-comparator",
+      "title": "Comparable y Comparator",
+      "icon": "⚖️",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "comparable",
+        "comparator",
+        "compareto",
+        "ordenar",
+        "sort",
+        "orden natural",
+        "orden personalizado",
+        "comparing",
+        "reversed",
+        "thencomparing",
+        "lambda comparator"
+      ],
+      "content": "Comparable define el orden natural de una clase (compareTo). Comparator define un criterio de ordenación externo, sin modificar la clase. Ambos son esenciales para ordenar colecciones.",
+      "subsections": [
+        {
+          "title": "Comparable — orden natural",
+          "explanation": "Implementar Comparable<T> en tu clase le da un 'orden natural'. Collections.sort() y TreeSet lo usan automáticamente. compareTo devuelve negativo (this < otro), 0 (iguales) o positivo (this > otro).",
+          "code": "public class Veterinario extends Empleado implements Comparable<Veterinario> {\n    // ... atributos y métodos ...\n\n    @Override\n    public int compareTo(Veterinario otro) {\n        // Comparar por salario calculado\n        return Double.compare(this.calcularSalario(), otro.calcularSalario());\n        // Double.compare es mejor que restar: evita overflow\n    }\n}\n\n// Ahora se puede ordenar una lista de Veterinarios\nList<Veterinario> vets = new ArrayList<>();\nvets.add(new Veterinario(\"Ana\", 2000, \"Cirugía\"));\nvets.add(new Veterinario(\"Luis\", 1500, \"Dermatología\"));\nCollections.sort(vets);  // ordena por salario (orden natural)\nSystem.out.println(vets.get(0).getNombre()); // Luis (menor salario)"
+        },
+        {
+          "title": "Comparator — criterio externo",
+          "explanation": "Comparator permite ordenar sin modificar la clase. Puedes tener múltiples criterios. Desde Java 8 se usa como lambda o con Comparator.comparing().",
+          "code": "// Opción 1: clase anónima (clásico)\nCollections.sort(lista, new Comparator<Mascota>() {\n    @Override\n    public int compare(Mascota a, Mascota b) {\n        return Integer.compare(a.getEdad(), b.getEdad());\n    }\n});\n\n// Opción 2: lambda (más conciso)\nlista.sort((a, b) -> Integer.compare(a.getEdad(), b.getEdad()));\n\n// Opción 3: Comparator.comparing (más legible — Java 8+)\nlista.sort(Comparator.comparing(Mascota::getEdad));\n\n// Orden inverso\nlista.sort(Comparator.comparing(Mascota::getEdad).reversed());\n\n// Orden alfabético inverso por nombre\nlista.sort(Comparator.comparing(Mascota::getNombre).reversed());"
+        },
+        {
+          "title": "Encadenamiento de comparadores (thenComparing)",
+          "explanation": "thenComparing añade un criterio secundario que se aplica cuando el primero empata. Permite ordenar por múltiples campos de forma muy legible.",
+          "code": "// Ordenar por especie y, en caso de empate, por edad descendente\nlista.sort(\n    Comparator.comparing(Mascota::getEspecie)\n              .thenComparing(Comparator.comparing(Mascota::getEdad).reversed())\n);\n\n// Resultado: primero agrupa por especie (A-Z),\n// dentro de la misma especie, los más viejos primero\n\n// Otro ejemplo: por especie ASC, luego nombre ASC\nlista.sort(\n    Comparator.comparing(Mascota::getEspecie)\n              .thenComparing(Mascota::getNombre)\n);"
+        },
+        {
+          "title": "Collections — algoritmos del framework",
+          "explanation": "La clase Collections (plural) tiene métodos estáticos muy útiles para listas: sort, reverse, shuffle, binarySearch, max, min, frequency...",
+          "code": "import java.util.Collections;\n\nList<Integer> nums = new ArrayList<>(List.of(5, 3, 8, 1, 9));\n\nCollections.sort(nums);              // [1, 3, 5, 8, 9]\nCollections.reverse(nums);           // [9, 8, 5, 3, 1]\nCollections.shuffle(nums);           // orden aleatorio\n\n// binarySearch — la lista DEBE estar ordenada antes\nCollections.sort(nums);\nint idx = Collections.binarySearch(nums, 5); // índice de 5\n\nSystem.out.println(Collections.max(nums));   // 9\nSystem.out.println(Collections.min(nums));   // 1\nSystem.out.println(Collections.frequency(nums, 3)); // 1\n\n// Copiar y rellenar\nList<Integer> destino = new ArrayList<>(Collections.nCopies(5, 0));\nCollections.copy(destino, nums);     // destino debe tener tamaño >= origen\nCollections.fill(destino, 99);       // [99, 99, 99, 99, 99]"
+        }
+      ]
+    },
+    {
+      "id": "streams",
+      "title": "Stream API",
+      "icon": "🌊",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "stream",
+        "filter",
+        "map",
+        "collect",
+        "reduce",
+        "sorted",
+        "foreach",
+        "count",
+        "distinct",
+        "collectors",
+        "tolist",
+        "programacion funcional",
+        "lambda stream"
+      ],
+      "content": "La Stream API (Java 8+) permite procesar colecciones de forma declarativa y funcional. Un Stream NO modifica la colección original: es un flujo temporal de datos sobre el que se encadenan operaciones.",
+      "subsections": [
+        {
+          "title": "Concepto clave — Stream vs Colección",
+          "explanation": "Una colección GUARDA datos. Un Stream PROCESA datos. Siempre parte de coleccion.stream(). Las operaciones intermedias (filter, map, sorted) son 'perezosas': no ejecutan hasta que llega una operación terminal (forEach, collect, count, reduce).",
+          "code": "// Siempre: lista.stream() para empezar\n// Operaciones INTERMEDIAS (devuelven Stream, encadenables):\n//   filter()   → filtrar elementos\n//   map()      → transformar elementos\n//   sorted()   → ordenar\n//   distinct() → eliminar duplicados\n\n// Operaciones TERMINALES (finalizan el stream):\n//   forEach()  → recorrer\n//   collect()  → recoger en colección\n//   count()    → contar\n//   reduce()   → acumular a un valor\n\n// Ejemplo básico\nlista.stream()\n     .filter(m -> m.getEdad() < 2)   // solo cachorros\n     .forEach(System.out::println);   // mostrar"
+        },
+        {
+          "title": "filter() — filtrar elementos",
+          "explanation": "filter() recibe un predicado (condición booleana) y devuelve solo los elementos que la cumplen. No modifica la lista original.",
+          "code": "List<Mascota> mascotas = /* tu lista */;\n\n// Filtrar cachorros (edad < 2)\nList<Mascota> cachorros = mascotas.stream()\n    .filter(m -> m.getEdad() < 2)\n    .collect(Collectors.toList());\n\nSystem.out.println(\"Cachorros: \" + cachorros.size());\n\n// Contar en vez de recoger\nlong numCachorros = mascotas.stream()\n    .filter(m -> m.esCachorro())\n    .count();\n\n// Filtrar por especie\nmascotas.stream()\n    .filter(m -> m.getEspecie().equals(\"Perro\"))\n    .sorted(Comparator.comparing(Mascota::getNombre))\n    .forEach(System.out::println);"
+        },
+        {
+          "title": "map() — transformar elementos",
+          "explanation": "map() convierte cada elemento en otra cosa. Muy usado para extraer un campo (String, int...) de una lista de objetos.",
+          "code": "// Obtener lista de nombres de todas las mascotas\nList<String> nombres = mascotas.stream()\n    .map(Mascota::getNombre)          // Mascota -> String\n    .collect(Collectors.toList());\n\nSystem.out.println(nombres); // [Rex, Misi, Tobi, ...]\n\n// Extraer edades\nList<Integer> edades = mascotas.stream()\n    .map(Mascota::getEdad)\n    .collect(Collectors.toList());\n\n// Obtener nombres de aprobados (lista de alumnos)\nList<String> aprobados = alumnos.stream()\n    .filter(a -> a.getNota() >= 5)\n    .map(Alumno::getNombre)\n    .collect(Collectors.toList());"
+        },
+        {
+          "title": "sorted() — ordenar",
+          "explanation": "sorted() dentro de un stream ordena sin modificar la lista original. Puede recibir un Comparator.",
+          "code": "// Ordenar por edad de menor a mayor\nmascotas.stream()\n    .sorted(Comparator.comparing(Mascota::getEdad))\n    .forEach(System.out::println);\n\n// Ordenar por nombre en orden inverso\nmascotas.stream()\n    .sorted(Comparator.comparing(Mascota::getNombre).reversed())\n    .forEach(System.out::println);\n\n// IMPORTANTE: esto NO modifica la lista original\n// Para modificarla, usa lista.sort(...) en su lugar"
+        },
+        {
+          "title": "collect() — recoger resultados",
+          "explanation": "collect() es la operación terminal que materializa el Stream en una colección. La más común es Collectors.toList(), pero también hay toSet(), toMap()...",
+          "code": "import java.util.stream.Collectors;\n\n// → List\nList<Mascota> perros = mascotas.stream()\n    .filter(m -> m.getEspecie().equals(\"Perro\"))\n    .collect(Collectors.toList());\n\n// → Set (elimina duplicados)\nSet<String> especies = mascotas.stream()\n    .map(Mascota::getEspecie)\n    .collect(Collectors.toSet());\n\nSystem.out.println(especies); // [Perro, Gato, ...] sin duplicados\n\n// → String concatenado\nString todos = mascotas.stream()\n    .map(Mascota::getNombre)\n    .collect(Collectors.joining(\", \"));"
+        },
+        {
+          "title": "reduce() — acumular a un valor",
+          "explanation": "reduce() combina todos los elementos en un único resultado. Útil para sumas, productos, concatenaciones. El primer argumento es el valor inicial (identidad).",
+          "code": "// Calcular edad media de las mascotas\ndouble sumaEdades = mascotas.stream()\n    .map(Mascota::getEdad)\n    .reduce(0, Integer::sum);         // 0 es el valor inicial\n\ndouble media = sumaEdades / mascotas.size();\nSystem.out.println(\"Edad media: \" + media);\n\n// Suma de notas\ndouble suma = alumnos.stream()\n    .map(Alumno::getNota)\n    .reduce(0.0, Double::sum);\n\ndouble mediaNotas = suma / alumnos.size();"
+        },
+        {
+          "title": "distinct() y especies únicas",
+          "explanation": "distinct() elimina duplicados en el stream. Combinado con collect(Collectors.toSet()) permite obtener todos los valores únicos de un campo.",
+          "code": "// Obtener todas las especies únicas (sin duplicados)\nSet<String> especiesUnicas = mascotas.stream()\n    .map(Mascota::getEspecie)\n    .distinct()                           // elimina duplicados\n    .collect(Collectors.toSet());\n\nSystem.out.println(especiesUnicas); // [Perro, Gato, Conejo]\n\n// También funciona con collect(toList()) si quieres orden\nList<String> especiesLista = mascotas.stream()\n    .map(Mascota::getEspecie)\n    .distinct()\n    .sorted()\n    .collect(Collectors.toList());"
+        },
+        {
+          "title": "Resumen — ejercicios del examen con Stream",
+          "explanation": "El ejercicio 8 del examen pide exactamente estas operaciones. Aquí tienes cada apartado resuelto de forma genérica para que entiendas el patrón.",
+          "code": "List<Mascota> lista = /* tu lista con 6+ mascotas */;\n\n// a) Ordenar por edad ASC\nlista.sort(Comparator.comparing(Mascota::getEdad));\n\n// b) Ordenar por nombre DESC\nlista.sort(Comparator.comparing(Mascota::getNombre).reversed());\n\n// c) Por especie ASC + edad DESC en empate\nlista.sort(Comparator.comparing(Mascota::getEspecie)\n    .thenComparing(Comparator.comparing(Mascota::getEdad).reversed()));\n\n// e) Filtrar cachorros y contar\nlong numCachorros = lista.stream()\n    .filter(Mascota::esCachorro)\n    .count();\nSystem.out.println(\"Cachorros: \" + numCachorros);\n\n// f) Lista de nombres\nList<String> nombres = lista.stream()\n    .map(Mascota::getNombre)\n    .collect(Collectors.toList());\nSystem.out.println(nombres);\n\n// g) Perros ordenados por nombre\nlista.stream()\n    .filter(m -> m.getEspecie().equals(\"Perro\"))\n    .sorted(Comparator.comparing(Mascota::getNombre))\n    .forEach(System.out::println);\n\n// h) Edad media\ndouble media = lista.stream()\n    .map(Mascota::getEdad)\n    .reduce(0, Integer::sum) / (double) lista.size();\nSystem.out.println(\"Edad media: \" + media);\n\n// i) Especies distintas\nSet<String> especies = lista.stream()\n    .map(Mascota::getEspecie)\n    .collect(Collectors.toSet());\nSystem.out.println(especies);"
+        }
+      ]
+    },
+    {
+      "id": "iteradores",
+      "title": "Iteradores",
+      "icon": "🔄",
+      "category": "Estructuras de Datos",
+      "tags": [
+        "iterator",
+        "iterador",
+        "hashnext",
+        "next",
+        "listiterator",
+        "concurrentmodificationexception",
+        "recorrer coleccion",
+        "eliminar iterando"
+      ],
+      "content": "Un Iterator es un objeto que permite recorrer una colección elemento a elemento. Es la única forma segura de eliminar elementos mientras se recorre la colección.",
+      "subsections": [
+        {
+          "title": "Iterator básico",
+          "explanation": "Todo for-each usa un Iterator internamente. Usarlo de forma explícita te da control total, especialmente para eliminar durante el recorrido.",
+          "code": "List<String> lista = new ArrayList<>(List.of(\"Ana\", \"Luis\", \"Zoe\"));\n\n// Forma explícita\nIterator<String> it = lista.iterator();\nwhile (it.hasNext()) {\n    String s = it.next();\n    System.out.println(s);\n}\n\n// El for-each hace lo mismo internamente\nfor (String s : lista) {\n    System.out.println(s);\n}"
+        },
+        {
+          "title": "Eliminar mientras se recorre",
+          "explanation": "Nunca uses lista.remove() dentro de un for-each: lanzará ConcurrentModificationException. Usa it.remove() del iterador.",
+          "code": "// ❌ INCORRECTO — ConcurrentModificationException\nfor (String s : lista) {\n    if (s.equals(\"Ana\")) {\n        lista.remove(s);  // ERROR\n    }\n}\n\n// ✅ CORRECTO — usar el iterador\nIterator<String> it = lista.iterator();\nwhile (it.hasNext()) {\n    String s = it.next();\n    if (s.equals(\"Ana\")) {\n        it.remove();  // seguro\n    }\n}"
+        },
+        {
+          "title": "ListIterator — recorrido bidireccional",
+          "explanation": "ListIterator extiende Iterator y permite recorrer en ambos sentidos, modificar y añadir elementos durante el recorrido.",
+          "code": "ListIterator<String> it = lista.listIterator();\n\n// Hacia adelante\nwhile (it.hasNext()) {\n    System.out.println(it.next());\n}\n\n// Hacia atrás (tras llegar al final)\nwhile (it.hasPrevious()) {\n    System.out.println(it.previous());\n}\n\n// Modificar elemento actual\nit.set(\"Nuevo valor\");\n\n// Añadir elemento en la posición actual\nit.add(\"Nuevo\");"
+        }
+      ]
+    }
+  ]
+}

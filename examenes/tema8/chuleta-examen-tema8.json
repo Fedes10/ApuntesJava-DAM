@@ -1,0 +1,355 @@
+{
+  "meta": {
+    "title": "Chuleta — Tema 8: Estructuras de Datos Complejas",
+    "tema": "Tema 8",
+    "tipo": "chuleta",
+    "descripcion": "Referencia rápida para el examen. Patrones, plantillas y código listo para copiar y adaptar."
+  },
+  "secciones": [
+    {
+      "id": "supervivencia",
+      "titulo": "🔥 Supervivencia — Abre esto primero",
+      "descripcion": "Regla de oro: Lee el enunciado → Identifica el patrón → Copia la plantilla → Cambia los nombres. No necesitas entender todo, solo saber qué cambiar.",
+      "bloques": [
+        {
+          "tipo": "tabla",
+          "titulo": "¿Qué me piden? → ¿Qué patrón uso?",
+          "filas": [
+            [
+              "Si el enunciado dice...",
+              "Patrón que aplicas"
+            ],
+            [
+              "Clase con atributos privados, constructor copia, equals",
+              "Clase completa (Ej. 1)"
+            ],
+            [
+              "Atributo static, contador, método estático",
+              "Clase con static (Ej. 2)"
+            ],
+            [
+              "Clase abstracta, extends, subclases",
+              "Herencia abstracta (Ej. 3)"
+            ],
+            [
+              "Interfaz, implements, generarInforme",
+              "Interfaz (Ej. 4)"
+            ],
+            [
+              "Clase genérica, <T>, Repositorio",
+              "Genéricos (Ej. 5)"
+            ],
+            [
+              "HashMap, HashSet, Map, Set",
+              "Gestor con colecciones (Ej. 6)"
+            ],
+            [
+              "Comparable, compareTo, mostrarMayor",
+              "Comparable + método genérico (Ej. 7)"
+            ],
+            [
+              "Stream, filter, map, sorted, collect",
+              "Stream API (Ej. 8)"
+            ]
+          ]
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Antes de empezar",
+          "items": [
+            "Primera línea SIEMPRE: import java.util.*; y import java.util.stream.Collectors;",
+            "Lee TODO el enunciado antes de escribir nada — los ejercicios se encadenan.",
+            "Crea un archivo .java por cada clase que pidan (mismo nombre que la clase)."
+          ]
+        },
+        {
+          "tipo": "tabla",
+          "titulo": "Errores comunes que te cuestan el punto",
+          "filas": [
+            [
+              "Error",
+              "Solución"
+            ],
+            [
+              "Cannot resolve symbol",
+              "Falta un import o has escrito mal el nombre de la clase"
+            ],
+            [
+              "Constructor call must be first statement",
+              "super(...) tiene que ser la 1ª línea del constructor hijo"
+            ],
+            [
+              "No compila el abstract",
+              "¿Has puesto ; después del método abstracto? abstract double metodo();"
+            ],
+            [
+              "Method does not override",
+              "La firma debe ser EXACTA: mismo nombre, tipo y parámetros"
+            ],
+            [
+              "El Set tiene duplicados",
+              "¿Has usado HashSet? ArrayList sí repite, HashSet no"
+            ],
+            [
+              "El stream no cambia la lista",
+              "Normal — los streams no modifican. Guarda el resultado en variable"
+            ],
+            [
+              "toString sale raro",
+              "Copia el formato EXACTO del enunciado letra por letra"
+            ],
+            [
+              "equals no funciona",
+              "¿El parámetro es Object (no la clase)? ¿Has puesto @Override?"
+            ]
+          ]
+        },
+        {
+          "tipo": "lista",
+          "titulo": "Orden recomendado si no da tiempo a todo",
+          "items": [
+            "Ej.1 — Clase básica: copiar y renombrar, puntos fáciles",
+            "Ej.2 — Clase con static: igual que el 1 con contador, puntos fáciles",
+            "Ej.5 — Genérico: copiar casi igual, menos de un minuto",
+            "Ej.6 — Gestor Map+Set: copiar y cambiar tipos",
+            "Ej.3 — Herencia: más largo pero es copiar estructura",
+            "Ej.4 — Interfaz: solo añadir implements + método",
+            "Ej.7 — Comparable: copiar el método + añadir Comparable",
+            "Ej.8 — Streams: el más largo, copiar y cambiar getters"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej1-patron",
+      "titulo": "Ej. 1 — Clase completa (encapsulación, constructor copia, equals)",
+      "descripcion": "Plantilla para cualquier clase básica. Solo cambia el nombre de la clase, los atributos y la condición del setter. La estructura de equals/hashCode y el constructor de copia siempre son igual.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Qué cambias respecto al ejemplo",
+          "items": [
+            "Nombre de la clase: Propietario → lo que diga el enunciado",
+            "Atributos: dni, nombre, telefono → los que pida el enunciado",
+            "Setter validación: telefono.length() == 9 → la condición que pidan",
+            "equals/hashCode: el campo dni → el campo que digan (normalmente ID o código)",
+            "toString: copia el formato EXACTO que muestre el enunciado"
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Plantilla — Propietario.java",
+          "codigo": "import java.util.Objects;\n\npublic class Propietario {\n    private String dni;       // ← cambia por los atributos que pidan\n    private String nombre;\n    private String telefono;\n\n    // Constructor normal\n    public Propietario(String dni, String nombre, String telefono) {\n        this.dni = dni;\n        this.nombre = nombre;\n        setTelefono(telefono); // usa el setter para que valide\n    }\n\n    // Constructor de copia — siempre igual, solo cambia el nombre de la clase\n    public Propietario(Propietario otro) {\n        this.dni = otro.dni;\n        this.nombre = otro.nombre;\n        this.telefono = otro.telefono;\n    }\n\n    // Getters\n    public String getDni()      { return dni; }\n    public String getNombre()   { return nombre; }\n    public String getTelefono() { return telefono; }\n\n    // Setters normales\n    public void setDni(String dni)       { this.dni = dni; }\n    public void setNombre(String nombre) { this.nombre = nombre; }\n\n    // Setter con validación — cambia SOLO la condición del if\n    public void setTelefono(String telefono) {\n        if (telefono != null && telefono.length() == 9) { // ← cambia esta condición\n            this.telefono = telefono;\n        }\n        // Si no cumple, no hace nada\n    }\n\n    // equals — cambia SOLO el campo de comparación (aquí: dni)\n    @Override\n    public boolean equals(Object obj) {\n        if (this == obj) return true;\n        if (obj == null || getClass() != obj.getClass()) return false;\n        Propietario that = (Propietario) obj;\n        return Objects.equals(dni, that.dni); // ← cambia dni por el campo que pidan\n    }\n\n    // hashCode — usa el mismo campo que equals\n    @Override\n    public int hashCode() {\n        return Objects.hash(dni); // ← mismo campo que equals\n    }\n\n    @Override\n    public String toString() {\n        return \"Propietario[dni=\" + dni + \", nombre=\" + nombre + \", telefono=\" + telefono + \"]\";\n    }\n}"
+        }
+      ]
+    },
+    {
+      "id": "ej2-patron",
+      "titulo": "Ej. 2 — Clase con static (contador compartido)",
+      "descripcion": "La única novedad es el atributo static y el método static. Todo lo demás es igual que el Ej.1.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Qué cambias respecto al ejemplo",
+          "items": [
+            "Nombre del contador static: totalMascotas → totalX (lo que pidan)",
+            "La clase de referencia: Propietario → la clase del Ej.1",
+            "Condición del setter: edad >= 0 → la que pidan",
+            "Método boolean: esCachorro() → nombre y condición que pidan",
+            "toString: si dice 'solo el nombre de X' → usa referencia.getNombre()"
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Plantilla — Mascota.java (fragmento clave)",
+          "codigo": "public class Mascota implements Informable {\n    private String nombre;\n    private String especie;\n    private int edad;\n    private Propietario propietario; // ← clase del ejercicio anterior\n\n    // ↓ static: existe UNA sola vez para toda la clase, no por objeto\n    private static int totalMascotas = 0;\n\n    public Mascota(String nombre, String especie, int edad, Propietario propietario) {\n        this.nombre = nombre;\n        this.especie = especie;\n        setEdad(edad);\n        this.propietario = propietario;\n        totalMascotas++; // ← SIEMPRE dentro del constructor\n    }\n\n    // Setter con validación\n    public void setEdad(int edad) {\n        if (edad >= 0) { this.edad = edad; } // ← cambia la condición\n    }\n\n    // Método boolean — nombre y condición según enunciado\n    public boolean esCachorro() { return edad < 2; }\n\n    // Método estático — se llama como Mascota.getTotalMascotas()\n    public static int getTotalMascotas() { return totalMascotas; }\n\n    // Getters y setters normales...\n    public String getNombre()           { return nombre; }\n    public String getEspecie()          { return especie; }\n    public int getEdad()                { return edad; }\n    public Propietario getPropietario() { return propietario; }\n\n    @Override\n    public String toString() {\n        // OJO: usa propietario.getNombre(), NO propietario.toString()\n        return \"Mascota[nombre=\" + nombre + \", especie=\" + especie +\n               \", edad=\" + edad + \", propietario=\" + propietario.getNombre() + \"]\";\n    }\n\n    @Override\n    public String generarInforme() {\n        String estado = esCachorro() ? \"Cachorro\" : \"Adulto\";\n        return \"Mascota: \" + nombre + \" (\" + especie + \") - \" + estado +\n               \" | Propietario: \" + propietario.getNombre();\n    }\n}"
+        }
+      ]
+    },
+    {
+      "id": "ej3-patron",
+      "titulo": "Ej. 3 — Herencia abstracta (padre + subclases)",
+      "descripcion": "La clase padre abstracta define el esqueleto. Cada subclase añade su atributo extra y calcula el salario a su manera. El polimorfismo hace lo demás.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Reglas que NO puedes saltarte",
+          "items": [
+            "abstract class = no se puede hacer new Empleado(). Solo new Veterinario() o new Auxiliar().",
+            "abstract double calcularSalario(); — con punto y coma, sin cuerpo {}.",
+            "super(nombre, salarioBase) DEBE ser la PRIMERA línea del constructor de cada subclase.",
+            "protected en los atributos del padre para que las subclases los usen directamente.",
+            "@Override antes de cada método que sobreescribas.",
+            "String.format(\"%.2f\", valor) para mostrar decimales con exactamente 2 cifras."
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Plantilla — Empleado.java + Veterinario.java + Auxiliar.java",
+          "codigo": "// ═══ Empleado.java ══════════════════════════════════════\npublic abstract class Empleado {\n    protected String nombre;        // protected = las subclases pueden acceder\n    protected double salarioBase;\n\n    public Empleado(String nombre, double salarioBase) {\n        this.nombre = nombre;\n        this.salarioBase = salarioBase;\n    }\n\n    abstract double calcularSalario(); // sin cuerpo — cada subclase lo implementa\n\n    @Override\n    public String toString() {\n        return String.format(\"[Empleado] %s | Salario: %.2f EUR\", nombre, calcularSalario());\n    }\n}\n\n\n// ═══ Veterinario.java ═══════════════════════════════════\npublic class Veterinario extends Empleado implements Informable, Comparable<Veterinario> {\n    private String especialidad;\n\n    public Veterinario(String nombre, double salarioBase, String especialidad) {\n        super(nombre, salarioBase); // ← PRIMERA LÍNEA obligatoria\n        this.especialidad = especialidad;\n    }\n\n    @Override\n    double calcularSalario() { return salarioBase + 500.0; }\n\n    @Override\n    public String toString() {\n        return String.format(\"[Veterinario] %s (%s) | Salario: %.2f EUR\",\n                             nombre, especialidad, calcularSalario());\n    }\n\n    @Override\n    public String generarInforme() {\n        return \"Veterinario: \" + nombre + \" | Especialidad: \" + especialidad +\n               String.format(\" | Salario: %.2f\", calcularSalario());\n    }\n\n    @Override\n    public int compareTo(Veterinario otro) {\n        return Double.compare(this.calcularSalario(), otro.calcularSalario());\n    }\n}\n\n\n// ═══ Auxiliar.java ══════════════════════════════════════\npublic class Auxiliar extends Empleado {\n    private String turno;\n\n    public Auxiliar(String nombre, double salarioBase, String turno) {\n        super(nombre, salarioBase); // ← PRIMERA LÍNEA obligatoria\n        this.turno = turno;\n    }\n\n    @Override\n    double calcularSalario() {\n        if (\"noche\".equalsIgnoreCase(turno)) return salarioBase * 1.20;\n        return salarioBase;\n    }\n\n    @Override\n    public String toString() {\n        return String.format(\"[Auxiliar] %s (%s) | Salario: %.2f EUR\",\n                             nombre, turno, calcularSalario());\n    }\n}\n\n\n// ═══ En el main — polimorfismo ═══════════════════════════\nEmpleado[] empleados = {\n    new Veterinario(\"Dr. Lopez\", 1500, \"Cirugía\"),\n    new Auxiliar(\"Carlos\", 1000, \"mañana\"),\n    new Auxiliar(\"Maria\",  1000, \"noche\")\n};\nfor (Empleado emp : empleados) {\n    System.out.println(emp.toString()); // Java usa el toString() correcto de cada uno\n}"
+        }
+      ]
+    },
+    {
+      "id": "ej4-patron",
+      "titulo": "Ej. 4 — Interfaz (contrato entre clases distintas)",
+      "descripcion": "Una interfaz no tiene código, solo firmas. Cualquier clase que la implemente está obligada a tener ese método. Permite meter objetos de clases distintas en la misma lista.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Pasos exactos",
+          "items": [
+            "Paso 1: crear Informable.java como interface (en IntelliJ: New > Java Class > Interface).",
+            "Paso 2: añadir implements Informable a las clases que pida el enunciado.",
+            "Paso 3: si la clase ya tiene extends, el implements va después: class Veterinario extends Empleado implements Informable.",
+            "Paso 4: implementar el método generarInforme() dentro de cada clase.",
+            "Paso 5: en el main, crear List<Informable> y añadir objetos de distintas clases."
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Informable.java + uso en el main",
+          "codigo": "// ═══ Informable.java ════════════════════════════════════\npublic interface Informable {\n    String generarInforme(); // solo la firma, sin cuerpo\n}\n\n\n// ═══ En el main ═════════════════════════════════════════\n// List<Informable> puede contener Veterinario, Mascota, o cualquier clase\n// que implemente Informable — aunque no tengan relación de herencia entre sí\nList<Informable> informables = new ArrayList<>();\ninformables.add(new Veterinario(\"Dra. Martinez\", 1800, \"Exóticos\"));\ninformables.add(m1); // Mascota\ninformables.add(m2); // Mascota\n\nfor (Informable inf : informables) {\n    System.out.println(inf.generarInforme()); // Java llama al correcto de cada objeto\n}"
+        }
+      ]
+    },
+    {
+      "id": "ej5-patron",
+      "titulo": "Ej. 5 — Clase genérica Repositorio<T>",
+      "descripcion": "Copiar casi igual. Solo cambia el nombre de la clase si piden otro nombre. La T es el comodín que se sustituye por el tipo real cuando usas la clase.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Cómo funciona la T",
+          "items": [
+            "new Repositorio<Mascota>() → T se convierte en Mascota en todo el código.",
+            "new Repositorio<String>() → T se convierte en String.",
+            "El código de la clase es exactamente el mismo — no tienes que escribirlo dos veces.",
+            "ArrayList.remove() usa el equals() del objeto para buscar — por eso equals() es importante."
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Repositorio.java — copiar tal cual",
+          "codigo": "import java.util.ArrayList;\n\npublic class Repositorio<T> { // ← la <T> hace la clase genérica\n    private ArrayList<T> elementos;\n\n    public Repositorio() {\n        this.elementos = new ArrayList<>();\n    }\n\n    public void agregar(T elemento) {\n        elementos.add(elemento);\n    }\n\n    public boolean eliminar(T elemento) {\n        return elementos.remove(elemento); // remove() ya devuelve boolean\n    }\n\n    public T buscarPorIndice(int i) {\n        if (i >= 0 && i < elementos.size()) {\n            return elementos.get(i);\n        }\n        return null; // índice inválido → null, no excepción\n    }\n\n    public int totalElementos() {\n        return elementos.size();\n    }\n\n    public void mostrarTodos() {\n        for (T elemento : elementos) {\n            System.out.println(elemento.toString());\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "id": "ej6-patron",
+      "titulo": "Ej. 6 — Gestor con Map + Set",
+      "descripcion": "HashMap para buscar por clave al instante. HashSet para guardar valores únicos sin duplicados. Siempre inicializar en el constructor.",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Qué cambias",
+          "items": [
+            "El tipo del Map: Map<String, Mascota> → Map<String, LoQueSea>",
+            "La clave del put: obj.getNombre() → el getter que digan como clave",
+            "El campo del Set: obj.getEspecie() → el campo que no deba repetirse"
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "GestorClinica.java — plantilla",
+          "codigo": "import java.util.HashMap;\nimport java.util.HashSet;\nimport java.util.Map;\nimport java.util.Set;\n\npublic class GestorClinica {\n    private Map<String, Mascota> mascotas; // ← cambia Mascota por el tipo que pidan\n    private Set<String> especies;          // ← campo que no debe repetirse\n\n    public GestorClinica() {\n        this.mascotas = new HashMap<>();   // inicializar en constructor\n        this.especies = new HashSet<>();\n    }\n\n    public void registrarMascota(Mascota m) {\n        mascotas.put(m.getNombre(), m);    // ← clave = campo que pidan\n        especies.add(m.getEspecie());      // ← el Set rechaza duplicados solo\n    }\n\n    public Mascota buscarPorNombre(String nombre) {\n        return mascotas.get(nombre);       // null si no existe\n    }\n\n    public void mostrarEspecies() {\n        System.out.println(\"Especies registradas:\");\n        for (String especie : especies) {\n            System.out.println(\"- \" + especie);\n        }\n    }\n\n    // entrySet() = todas las entradas como pares clave/valor\n    public void mostrarTodasLasMascotas() {\n        System.out.println(\"Mascotas en el sistema:\");\n        for (Map.Entry<String, Mascota> entry : mascotas.entrySet()) {\n            System.out.println(entry.getKey() + \" -> \" + entry.getValue().toString());\n        }\n    }\n}\n\n// En el main — buscar existente y no existente:\nGestorClinica gestor = new GestorClinica();\ngestor.registrarMascota(m1);\ngestor.registrarMascota(m2);\ngestor.mostrarEspecies();\nMascota encontrada = gestor.buscarPorNombre(\"Rex\");      // objeto Mascota\nMascota nula = gestor.buscarPorNombre(\"Fantasma\");       // null\nSystem.out.println(nula != null ? nula : \"No encontrada\");"
+        }
+      ]
+    },
+    {
+      "id": "ej7-patron",
+      "titulo": "Ej. 7 — Comparable + método genérico mostrarMayor",
+      "descripcion": "El método genérico se copia siempre igual. Solo hay que añadir implements Comparable<T> a la clase que pidan y escribir compareTo().",
+      "bloques": [
+        {
+          "tipo": "lista",
+          "titulo": "Desglose de la firma public static <T extends Comparable<T>> void mostrarMayor(T a, T b)",
+          "items": [
+            "public → accesible desde cualquier clase.",
+            "static → es de la clase, no de un objeto. Se llama directamente: mostrarMayor(...) sin hacer new.",
+            "<T extends Comparable<T>> → T es el tipo genérico con una restricción: solo acepta tipos que puedan compararse a sí mismos. String, Integer y Veterinario lo cumplen.",
+            "void → no devuelve nada.",
+            "T a, T b → dos parámetros del mismo tipo T.",
+            "compareTo devuelve: positivo si a > b, negativo si a < b, 0 si son iguales."
+          ]
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "mostrarMayor + Comparable en Veterinario",
+          "codigo": "// ═══ En Main.java — antes del main ══════════════════════\npublic static <T extends Comparable<T>> void mostrarMayor(T a, T b) {\n    int resultado = a.compareTo(b);\n    if (resultado > 0)      System.out.println(\"El mayor es: \" + a);\n    else if (resultado < 0) System.out.println(\"El mayor es: \" + b);\n    else                    System.out.println(\"Ambos son iguales.\");\n}\n\n// ═══ En Veterinario.java — añadir Comparable ═════════════\n// La clase queda: public class Veterinario extends Empleado implements Informable, Comparable<Veterinario>\n@Override\npublic int compareTo(Veterinario otro) {\n    return Double.compare(this.calcularSalario(), otro.calcularSalario());\n    // Double.compare es más seguro que restar doubles\n}\n\n// ═══ En el main — llamadas de prueba ═════════════════════\nmostrarMayor(\"Zebra\", \"Avion\"); // String: compara alfabéticamente → Zebra\nmostrarMayor(10, 50);            // Integer: compara por valor → 50\nVeterinario v1 = new Veterinario(\"V1\", 1000, \"A\"); // salario 1500\nVeterinario v2 = new Veterinario(\"V2\", 2000, \"B\"); // salario 2500\nmostrarMayor(v1, v2);            // Veterinario: compara por salario → V2"
+        }
+      ]
+    },
+    {
+      "id": "ej8-patron",
+      "titulo": "Ej. 8 — Streams y Comparator",
+      "descripcion": "Copia el patrón y cambia el getter. Cada stream empieza con lista.stream(). lista.sort() SÍ modifica la lista. stream().sorted() NO la modifica.",
+      "bloques": [
+        {
+          "tipo": "codigo",
+          "titulo": "Cheatsheet completa — copiar y cambiar getters",
+          "codigo": "// ORDENAR lista original (SÍ modifica)\nlista.sort(Comparator.comparing(Mascota::getEdad));                    // ASC\nlista.sort(Comparator.comparing(Mascota::getNombre).reversed());        // DESC\nlista.sort(Comparator.comparing(Mascota::getEspecie)                   // por especie ASC\n    .thenComparing(Comparator.comparing(Mascota::getEdad).reversed())); // luego edad DESC\n\n// MOSTRAR tras cada ordenación\nlista.forEach(System.out::println);\n\n// FILTRAR + RECOGER (NO modifica la lista original)\nList<Mascota> cachorros = lista.stream()\n    .filter(m -> m.getEdad() < 2)          // condición\n    .collect(Collectors.toList());\n\n// EXTRAER UN CAMPO → lista de Strings\nList<String> nombres = lista.stream()\n    .map(Mascota::getNombre)               // Mascota → String\n    .collect(Collectors.toList());\n\n// FILTRAR + ORDENAR + MOSTRAR (todo de una)\nlista.stream()\n    .filter(m -> m.getEspecie().equals(\"Perro\"))\n    .sorted(Comparator.comparing(Mascota::getNombre))\n    .forEach(System.out::println);\n\n// CONTAR\nlong total = lista.stream()\n    .filter(Mascota::esCachorro)           // o .filter(m -> condicion)\n    .count();\n\n// EDAD MEDIA con reduce\ndouble media = lista.stream()\n    .map(Mascota::getEdad)\n    .reduce(0, Integer::sum)               // suma todas las edades\n    / (double) lista.size();               // dividir fuera del stream\n\n// VALORES DISTINTOS → Set (sin repetidos automáticamente)\nSet<String> especies = lista.stream()\n    .map(Mascota::getEspecie)\n    .distinct()                            // eliminar duplicados\n    .collect(Collectors.toSet());"
+        }
+      ]
+    },
+    {
+      "id": "colecciones-rapido",
+      "titulo": "Referencia rápida — Colecciones",
+      "descripcion": "Sintaxis básica de List, Map y Set para no perder tiempo buscando.",
+      "bloques": [
+        {
+          "tipo": "codigo",
+          "titulo": "ArrayList — operaciones básicas",
+          "codigo": "List<String> lista = new ArrayList<>();\nlista.add(\"Ana\");          // añadir al final\nlista.add(0, \"Bea\");       // insertar en posición\nlista.get(0);               // obtener por índice\nlista.remove(\"Ana\");        // eliminar por objeto\nlista.remove(0);            // eliminar por índice\nlista.size();               // cuántos elementos\nlista.contains(\"Ana\");      // ¿existe?\nlista.isEmpty();            // ¿vacía?\n\n// Recorrer\nfor (String s : lista) { System.out.println(s); }\nlista.forEach(System.out::println);  // equivalente con lambda"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "HashMap — operaciones básicas",
+          "codigo": "Map<String, Integer> mapa = new HashMap<>();\nmapa.put(\"clave\", 10);              // añadir\nmapa.get(\"clave\");                   // obtener — null si no existe\nmapa.getOrDefault(\"clave\", 0);       // obtener con valor por defecto\nmapa.containsKey(\"clave\");           // ¿existe la clave?\nmapa.remove(\"clave\");                // eliminar\nmapa.size();\n\n// Recorrer — forma recomendada\nfor (Map.Entry<String, Integer> e : mapa.entrySet()) {\n    System.out.println(e.getKey() + \" -> \" + e.getValue());\n}\n\n// Contar ocurrencias con getOrDefault\nmapa.put(marca, mapa.getOrDefault(marca, 0) + 1);"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "HashSet — operaciones básicas",
+          "codigo": "Set<String> set = new HashSet<>();\nset.add(\"Perro\");    // añadir\nset.add(\"Perro\");    // ignorado — duplicado\nset.contains(\"Gato\"); // ¿existe?\nset.remove(\"Perro\"); // eliminar\nset.size();\n\nfor (String s : set) { System.out.println(s); } // recorrer"
+        }
+      ]
+    },
+    {
+      "id": "mini-plantillas",
+      "titulo": "Mini-plantillas — copiar y pegar",
+      "descripcion": "Las estructuras que aparecen una y otra vez en el examen. Copia, pega y cambia solo los nombres.",
+      "bloques": [
+        {
+          "tipo": "codigo",
+          "titulo": "Constructor de copia — siempre igual",
+          "codigo": "public NombreClase(NombreClase otro) {\n    this.atr1 = otro.atr1;\n    this.atr2 = otro.atr2;\n    this.atr3 = otro.atr3;\n    // un this.x = otro.x por cada atributo\n}"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "equals + hashCode — siempre igual (solo cambia el campo)",
+          "codigo": "import java.util.Objects;\n\n@Override\npublic boolean equals(Object obj) {\n    if (this == obj) return true;\n    if (obj == null || getClass() != obj.getClass()) return false;\n    MiClase otro = (MiClase) obj;           // ← cambia MiClase\n    return Objects.equals(campo, otro.campo); // ← cambia campo\n}\n\n@Override\npublic int hashCode() {\n    return Objects.hash(campo); // ← mismo campo que equals\n}"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Interfaz + implementación mínima",
+          "codigo": "// Archivo NombreInterfaz.java\npublic interface NombreInterfaz {\n    String nombreMetodo();\n}\n\n// En la clase que la implemente:\npublic class MiClase implements NombreInterfaz {\n    @Override\n    public String nombreMetodo() {\n        return \"datos de esta clase: \" + atributo;\n    }\n}"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Clase abstracta + subclase — esqueleto",
+          "codigo": "// Padre\npublic abstract class Padre {\n    protected String atrib1;\n    protected double atrib2;\n    public Padre(String a1, double a2) { this.atrib1 = a1; this.atrib2 = a2; }\n    abstract double calcular();  // ← sin cuerpo, con ;\n}\n\n// Hijo\npublic class Hijo extends Padre {\n    private String extra;\n    public Hijo(String a1, double a2, String extra) {\n        super(a1, a2);  // ← PRIMERA LÍNEA siempre\n        this.extra = extra;\n    }\n    @Override\n    double calcular() { return atrib2 + 500; } // ← fórmula que pida el enunciado\n}"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Repositorio genérico mínimo — copiar igual",
+          "codigo": "class Repositorio<T> {\n    private ArrayList<T> elementos;\n    public Repositorio() { elementos = new ArrayList<>(); }\n    public void agregar(T e) { elementos.add(e); }\n    public boolean eliminar(T e) { return elementos.remove(e); }\n    public T buscarPorIndice(int i) {\n        if (i < 0 || i >= elementos.size()) return null;\n        return elementos.get(i);\n    }\n    public int totalElementos() { return elementos.size(); }\n    public void mostrarTodos() { for (T e : elementos) System.out.println(e); }\n}"
+        },
+        {
+          "tipo": "codigo",
+          "titulo": "Gestor con Map + Set mínimo",
+          "codigo": "class Gestor {\n    private Map<String, Objeto> mapa = new HashMap<>();\n    private Set<String> unicos = new HashSet<>();\n    public void registrar(Objeto o) {\n        mapa.put(o.getClave(), o);      // ← getClave() = getter de la clave\n        unicos.add(o.getCategoria());   // ← getCategoria() = campo sin repetir\n    }\n    public Objeto buscar(String clave) { return mapa.get(clave); }\n    public void mostrarUnicos() { System.out.println(unicos); }\n    public void mostrarTodos() {\n        for (Map.Entry<String, Objeto> e : mapa.entrySet()) {\n            System.out.println(e.getKey() + \" -> \" + e.getValue());\n        }\n    }\n}"
+        }
+      ]
+    }
+  ]
+}

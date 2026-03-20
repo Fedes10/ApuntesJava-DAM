@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ============================================================
+       JAVADOCS ES — Documentación Java en Español
+       Archivo principal: index.html
+       ============================================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaDocs ES — Documentación Java en Español</title>
+  <meta name="description" content="Documentación completa de Java en español. Busca cualquier concepto: if, for, clases, métodos, arrays y más." />
+
+  <!-- Fuentes de Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Estilos principales -->
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       BARRA SUPERIOR (Header)
+       ============================================================ -->
+  <header id="header">
+
+    <!-- Botón menú hamburguesa — solo visible en móvil -->
+    <button id="menu-toggle" aria-label="Abrir menú">☰</button>
+
+    <!-- Logo -->
+    <a href="#" class="header-logo" id="home-link" aria-label="Inicio">
+      <div class="logo-icon">☕</div>
+      <span>JavaDocs<span style="color:var(--accent)">ES</span></span>
+      <span class="logo-sub">en Español</span>
+    </a>
+
+    <!-- Buscador global -->
+    <div class="header-search" role="search">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        id="header-search"
+        placeholder="Busca: if, for, clase, array, excepción..."
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Buscar en la documentación"
+      />
+      <span class="search-shortcut">Ctrl+K</span>
+    </div>
+
+    <!-- Info versión -->
+    <div class="header-right">
+      <span class="header-badge">Java 17+ · ES</span>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       OVERLAY DE BÚSQUEDA — resultados flotantes
+       ============================================================ -->
+  <div id="search-overlay" role="dialog" aria-label="Resultados de búsqueda">
+    <div id="search-results-panel"></div>
+  </div>
+
+  <!-- ============================================================
+       LAYOUT PRINCIPAL (Sidebar + Contenido)
+       ============================================================ -->
+  <div id="layout">
+
+    <!-- Overlay para cerrar sidebar en móvil -->
+    <div id="sidebar-overlay"></div>
+
+    <!-- =========================================================
+         SIDEBAR — Menú lateral de navegación
+         ========================================================= -->
+    <nav id="sidebar" aria-label="Navegación de documentación">
+
+      <!-- Filtro rápido dentro del sidebar -->
+      <div class="sidebar-search-wrap">
+        <input
+          type="search"
+          id="sidebar-filter"
+          class="sidebar-search-input"
+          placeholder="Filtrar secciones..."
+          autocomplete="off"
+          aria-label="Filtrar secciones"
+        />
+      </div>
+
+      <!-- Los items se generan dinámicamente por scripts.js -->
+      <div id="sidebar-nav" role="list"></div>
+    </nav>
+
+    <!-- =========================================================
+         CONTENIDO PRINCIPAL
+         ========================================================= -->
+    <main id="main-content">
+
+      <!-- ---- Pantalla de bienvenida (inicio) ---- -->
+      <div id="welcome-screen" role="main">
+        <div class="welcome-hero">☕</div>
+        <h1 class="welcome-title">JavaDocs ES</h1>
+        <p class="welcome-sub">
+          Tu referencia completa de Java en español. Busca cualquier concepto
+          o navega por el menú lateral para encontrar lo que necesitas.
+        </p>
+
+        <!-- Estadísticas -->
+        <div class="welcome-stats">
+          <div class="stat-card">
+            <div class="stat-num" id="stats-sections">—</div>
+            <div class="stat-label">Secciones</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">100+</div>
+            <div class="stat-label">Ejemplos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num">ES</div>
+            <div class="stat-label">Idioma</div>
+          </div>
+        </div>
+
+        <!-- Consejos de uso -->
+        <div class="welcome-tips">
+          <h3>💡 Cómo usar esta guía</h3>
+          <div class="tip-item">
+            <span class="tip-key">Ctrl+K</span>
+            <span>Busca cualquier concepto (if, for, clase…)</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-key">Sidebar</span>
+            <span>Navega por categorías en el menú izquierdo</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-key">📋 Copiar</span>
+            <span>Copia cualquier bloque de código con un clic</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-key">#URL</span>
+            <span>Guarda o comparte un enlace directo a cada sección</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---- Sección de documentación (se llena dinámicamente) ---- -->
+      <div id="doc-section">
+        <div id="doc-content"></div>
+        <!-- Navegación anterior / siguiente -->
+        <div class="section-nav" id="section-nav"></div>
+      </div>
+
+    </main>
+  </div><!-- /#layout -->
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script src="scripts.js"></script>
+
+  <!-- Enlace al inicio -->
+  <script>
+    document.getElementById("home-link").addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.hash = "";
+      document.getElementById("welcome-screen").style.display = "flex";
+      document.getElementById("doc-section").style.display = "none";
+      document.querySelectorAll(".sidebar-item").forEach(el => el.classList.remove("active"));
+    });
+  </script>
+
+</body>
+</html>

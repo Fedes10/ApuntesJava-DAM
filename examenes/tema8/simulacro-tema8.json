@@ -1,0 +1,225 @@
+{
+    "meta": {
+        "title": "Simulacro — Clínica Veterinaria PetCare",
+        "tema": "Tema 8",
+        "tipo": "simulacro",
+        "descripcion": "Construyes el sistema de la clínica paso a paso. Cada ejercicio usa lo del anterior, hazlos en orden."
+    },
+    "ejercicios": [
+        {
+            "id": "ej1",
+            "numero": 1,
+            "titulo": "Clase Propietario",
+            "enunciado": "Crea el archivo Propietario.java. Esta clase representa a la persona dueña de la mascota.",
+            "apartados": [
+                "Tres atributos privados: dni (String), nombre (String) y telefono (String).",
+                "Constructor que reciba los tres datos. Llama a setTelefono() desde aquí para que valide.",
+                "Constructor de copia: recibe otro Propietario y copia sus datos uno a uno.",
+                "Getters getDni(), getNombre(), getTelefono(). Setters setDni() y setNombre() normales.",
+                "setTelefono() que SOLO guarde el valor si tiene exactamente 9 caracteres.",
+                "equals() y hashCode() usando SOLO el campo dni.",
+                "toString() con formato: Propietario[dni=12345678A, nombre=Ana Garcia, telefono=612345678]"
+            ],
+            "pistas": [
+                "El constructor de copia: public Propietario(Propietario otro) { this.dni = otro.dni; ... }",
+                "Para el setter: if (telefono != null && telefono.length() == 9) { this.telefono = telefono; }",
+                "Necesitas import java.util.Objects; al principio del archivo.",
+                "En el main: crea p1, luego p2 con new Propietario(p1). Cambia p2.setTelefono(\"999888777\") y comprueba que p1 no cambió."
+            ],
+            "solucion": {
+                "archivo": "Propietario.java",
+                "explicacion": "Línea por línea: 'private' significa que solo esta clase puede tocar esos datos directamente. El constructor de copia crea un objeto NUEVO con los mismos datos — si cambias p2, p1 no se ve afectado porque son dos objetos distintos en memoria. El setTelefono valida antes de guardar: si el String no tiene 9 caracteres, simplemente no hace nada. equals() compara solo por DNI porque dos propietarios con el mismo DNI son la misma persona aunque tengan distinto teléfono.",
+                "codigo": "import java.util.Objects;\n\npublic class Propietario {\n    private String dni;\n    private String nombre;\n    private String telefono;\n\n    // Constructor normal: recibe los 3 datos y los guarda\n    public Propietario(String dni, String nombre, String telefono) {\n        this.dni = dni;\n        this.nombre = nombre;\n        setTelefono(telefono); // usamos el setter para validar ya desde aquí\n    }\n\n    // Constructor de copia: recibe OTRO Propietario y copia sus datos\n    // Así p2 = new Propietario(p1) crea un objeto NUEVO independiente de p1\n    public Propietario(Propietario otro) {\n        this.dni = otro.dni;\n        this.nombre = otro.nombre;\n        this.telefono = otro.telefono;\n    }\n\n    // Getters: permiten leer los datos desde fuera de la clase\n    public String getDni()      { return dni; }\n    public String getNombre()   { return nombre; }\n    public String getTelefono() { return telefono; }\n\n    // Setters normales para dni y nombre\n    public void setDni(String dni)       { this.dni = dni; }\n    public void setNombre(String nombre) { this.nombre = nombre; }\n\n    // Setter con validación: solo guarda si tiene exactamente 9 caracteres\n    public void setTelefono(String telefono) {\n        if (telefono != null && telefono.length() == 9) {\n            this.telefono = telefono;\n        }\n        // Si no cumple la condición, no hace nada — el valor no cambia\n    }\n\n    // equals: dos Propietario son iguales si tienen el mismo DNI\n    // Objects.equals evita NullPointerException si dni fuera null\n    @Override\n    public boolean equals(Object o) {\n        if (this == o) return true; // es el mismo objeto en memoria\n        if (o == null || getClass() != o.getClass()) return false;\n        Propietario that = (Propietario) o;\n        return Objects.equals(dni, that.dni);\n    }\n\n    // hashCode debe basarse en los mismos campos que equals\n    @Override\n    public int hashCode() {\n        return Objects.hash(dni);\n    }\n\n    // toString: lo que se muestra al hacer System.out.println(propietario)\n    @Override\n    public String toString() {\n        return \"Propietario[dni=\" + dni + \", nombre=\" + nombre + \", telefono=\" + telefono + \"]\";\n    }\n}"
+            }
+        },
+        {
+            "id": "ej-informable",
+            "numero": 2,
+            "titulo": "Interfaz Informable",
+            "enunciado": "Crea el archivo Informable.java como interface. Es muy corto — solo define el contrato que deben cumplir las clases que lo implementen.",
+            "apartados": [
+                "Crear Informable.java como Interface (en IntelliJ: New > Java Class > selecciona 'Interface').",
+                "Declarar el método: String generarInforme(); — sin cuerpo, solo la firma."
+            ],
+            "pistas": [
+                "Una interface no tiene constructor ni atributos, solo firmas de métodos.",
+                "Las clases que pongan 'implements Informable' están obligadas a tener un método generarInforme().",
+                "Mascota y Veterinario implementarán esta interfaz en sus respectivos ejercicios."
+            ],
+            "solucion": {
+                "archivo": "Informable.java",
+                "explicacion": "Una interfaz es un CONTRATO. No implementa nada, solo dice: 'cualquier clase que me implemente tiene que tener este método'. Sirve para que objetos de clases muy distintas (Veterinario, Mascota) puedan tratarse de la misma forma cuando los metemos en una lista List<Informable>. Java garantiza que todos tienen generarInforme(), aunque cada uno lo haga diferente.",
+                "codigo": "public interface Informable {\n    // Solo la firma del método, sin cuerpo ({}).\n    // Cualquier clase que ponga 'implements Informable'\n    // DEBE tener este método o el compilador dará error.\n    String generarInforme();\n}"
+            }
+        },
+        {
+            "id": "ej2",
+            "numero": 3,
+            "titulo": "Clase Mascota",
+            "enunciado": "Crea el archivo Mascota.java. Esta clase necesita llevar la cuenta de cuántas mascotas se han creado en total usando un atributo estático.",
+            "apartados": [
+                "Cuatro atributos privados: nombre, especie (String), edad (int), propietario (Propietario).",
+                "Un atributo estático privado totalMascotas = 0. Es de la clase, no de cada objeto.",
+                "Constructor que reciba los 4 datos. Al final del constructor: totalMascotas++",
+                "Getters para los 4 atributos. Setter para edad que solo guarde si edad >= 0.",
+                "Método esCachorro(): devuelve true si edad < 2.",
+                "Método estático getTotalMascotas(): devuelve el contador.",
+                "toString() con formato exacto. IMPORTANTE: usa propietario.getNombre(), no propietario.toString().",
+                "La clase debe poner 'implements Informable' e implementar generarInforme()."
+            ],
+            "pistas": [
+                "static significa que el atributo pertenece a la clase, no a cada objeto. Todos los objetos Mascota comparten el mismo totalMascotas.",
+                "El método estático se llama con el nombre de la clase: Mascota.getTotalMascotas(), no mascota.getTotalMascotas().",
+                "En el toString usa propietario.getNombre() — si usas propietario.toString() el formato quedaría mal."
+            ],
+            "solucion": {
+                "archivo": "Mascota.java",
+                "explicacion": "El atributo 'private static int totalMascotas = 0' existe UNA sola vez para toda la clase, no en cada objeto. Cuando haces new Mascota(...) el constructor ejecuta totalMascotas++ y el número sube. Si creas 3 mascotas distintas, totalMascotas vale 3. El método estático getTotalMascotas() se llama como Mascota.getTotalMascotas() porque pertenece a la clase, no a un objeto concreto. esCachorro() devuelve un boolean: 'return this.edad < 2' es true si edad es 0 o 1, false si es 2 o más.",
+                "codigo": "public class Mascota implements Informable {\n    private String nombre;\n    private String especie;\n    private int edad;\n    private Propietario propietario;\n\n    // static: existe UNA sola vez para toda la clase\n    // No está dentro de ningún objeto, es de la clase Mascota\n    private static int totalMascotas = 0;\n\n    public Mascota(String nombre, String especie, int edad, Propietario propietario) {\n        this.nombre = nombre;\n        this.especie = especie;\n        setEdad(edad);           // usamos el setter para que valide\n        this.propietario = propietario;\n        totalMascotas++;         // cada new Mascota() sube el contador\n    }\n\n    // Getters\n    public String getNombre()           { return nombre; }\n    public String getEspecie()          { return especie; }\n    public int getEdad()                { return edad; }\n    public Propietario getPropietario() { return propietario; }\n\n    // Setters\n    public void setNombre(String nombre)      { this.nombre = nombre; }\n    public void setEspecie(String especie)    { this.especie = especie; }\n    public void setPropietario(Propietario p) { this.propietario = p; }\n\n    // Setter con validación: edad negativa no tiene sentido\n    public void setEdad(int edad) {\n        if (edad >= 0) {\n            this.edad = edad;\n        }\n        // Si es negativa, no hace nada — el valor anterior se mantiene\n    }\n\n    // Devuelve true si tiene menos de 2 años, false si tiene 2 o más\n    public boolean esCachorro() {\n        return this.edad < 2;\n    }\n\n    // Método estático: se llama como Mascota.getTotalMascotas()\n    public static int getTotalMascotas() {\n        return totalMascotas;\n    }\n\n    @Override\n    public String toString() {\n        // OJO: propietario.getNombre() — NO propietario.toString()\n        // Si usáramos toString() saldría: Propietario[dni=..., nombre=Ana, telefono=...]\n        // El formato pedido solo quiere el nombre\n        return \"Mascota[nombre=\" + nombre + \", especie=\" + especie + \", edad=\" + edad +\n               \", propietario=\" + propietario.getNombre() + \"]\";\n    }\n\n    // Viene de implements Informable — obligatorio implementarlo\n    @Override\n    public String generarInforme() {\n        String estado = esCachorro() ? \"Cachorro\" : \"Adulto\"; // operador ternario: condición ? siTrue : siFalse\n        return \"Mascota: \" + nombre + \" (\" + especie + \") - \" + estado +\n               \" | Propietario: \" + propietario.getNombre();\n    }\n}"
+            }
+        },
+        {
+            "id": "ej3",
+            "numero": 4,
+            "titulo": "Jerarquía de Empleados",
+            "enunciado": "Crea tres archivos: Empleado.java (abstracto), Veterinario.java y Auxiliar.java. Son tres clases relacionadas por herencia.",
+            "apartados": [
+                "Empleado.java: clase ABSTRACTA. Atributos protected nombre y salarioBase. Constructor. Método abstracto calcularSalario(). toString().",
+                "Veterinario.java: hereda de Empleado, implementa Informable y Comparable<Veterinario>. Tiene especialidad. calcularSalario() = salarioBase + 500.",
+                "Auxiliar.java: hereda de Empleado. Tiene turno. calcularSalario() = salarioBase normal, o salarioBase*1.20 si turno es 'noche'.",
+                "En el main: array Empleado[] con los tres tipos. Recórrelo con for y llama a toString() — Java usa el correcto de cada subclase."
+            ],
+            "pistas": [
+                "'abstract class' no se puede instanciar: no puedes hacer new Empleado(...), solo new Veterinario(...) o new Auxiliar(...).",
+                "Los constructores de las subclases DEBEN empezar con super(nombre, salarioBase) para llamar al constructor del padre.",
+                "'protected' en Empleado permite que las subclases accedan a nombre y salarioBase directamente sin getter.",
+                "String.format(\"[Veterinario] %s (%s) | Salario: %.2f EUR\", nombre, especialidad, calcularSalario()) — %s=texto, %.2f=decimal 2 cifras."
+            ],
+            "solucion": {
+                "archivo": "Empleado.java + Veterinario.java + Auxiliar.java",
+                "explicacion": "Empleado es la plantilla base: define qué tiene todo empleado (nombre, salario) y obliga a las subclases a implementar calcularSalario() porque es 'abstract'. Veterinario y Auxiliar extienden Empleado y cada uno calcula su salario diferente. Cuando recorres el array Empleado[] y llamas emp.toString(), Java detecta el tipo real (¿es un Veterinario? ¿un Auxiliar?) y llama al toString() correcto. Eso es polimorfismo: mismo código, comportamiento diferente según el objeto real.",
+                "codigo": "// ═══════════════════════════════════════════════════════\n// ARCHIVO: Empleado.java\n// ═══════════════════════════════════════════════════════\npublic abstract class Empleado {\n    // protected: las subclases pueden acceder directamente\n    // Si fueran private, Veterinario no podría usar this.nombre\n    protected String nombre;\n    protected double salarioBase;\n\n    public Empleado(String nombre, double salarioBase) {\n        this.nombre = nombre;\n        this.salarioBase = salarioBase;\n    }\n\n    // abstract: no tiene cuerpo aquí — obliga a las subclases a implementarlo\n    // Cada subclase calcula el salario de forma diferente\n    abstract double calcularSalario();\n\n    @Override\n    public String toString() {\n        // %.2f formatea el double con 2 decimales: 1500.0 → 1500,00\n        return String.format(\"[Empleado] %s | Salario: %.2f EUR\", nombre, calcularSalario());\n    }\n}\n\n\n// ═══════════════════════════════════════════════════════\n// ARCHIVO: Veterinario.java\n// ═══════════════════════════════════════════════════════\npublic class Veterinario extends Empleado implements Informable, Comparable<Veterinario> {\n    // 'extends Empleado' = hereda nombre, salarioBase y el toString del padre\n    // 'implements Informable' = obligado a tener generarInforme()\n    // 'implements Comparable<Veterinario>' = obligado a tener compareTo()\n    private String especialidad;\n\n    public Veterinario(String nombre, double salarioBase, String especialidad) {\n        super(nombre, salarioBase); // OBLIGATORIO: llama al constructor de Empleado\n        this.especialidad = especialidad;\n    }\n\n    // Su salario es el base + 500 euros fijos de complemento\n    @Override\n    double calcularSalario() {\n        return salarioBase + 500.0;\n    }\n\n    @Override\n    public String toString() {\n        return String.format(\"[Veterinario] %s (%s) | Salario: %.2f EUR\",\n                             nombre, especialidad, calcularSalario());\n    }\n\n    // Viene de implements Informable\n    @Override\n    public String generarInforme() {\n        return \"Veterinario: \" + nombre + \" | Especialidad: \" + especialidad +\n               String.format(\" | Salario: %.2f\", calcularSalario());\n    }\n\n    // Viene de implements Comparable<Veterinario>\n    // compareTo: negativo si this < otro, 0 si iguales, positivo si this > otro\n    // Aquí comparamos por salario calculado\n    @Override\n    public int compareTo(Veterinario otro) {\n        return Double.compare(this.calcularSalario(), otro.calcularSalario());\n    }\n}\n\n\n// ═══════════════════════════════════════════════════════\n// ARCHIVO: Auxiliar.java\n// ═══════════════════════════════════════════════════════\npublic class Auxiliar extends Empleado {\n    private String turno; // valores posibles: \"mañana\", \"tarde\", \"noche\"\n\n    public Auxiliar(String nombre, double salarioBase, String turno) {\n        super(nombre, salarioBase); // OBLIGATORIO\n        this.turno = turno;\n    }\n\n    // Si trabaja de noche cobra un 20% más\n    // equalsIgnoreCase: compara ignorando mayúsculas/minúsculas\n    @Override\n    double calcularSalario() {\n        if (\"noche\".equalsIgnoreCase(turno)) {\n            return salarioBase * 1.20;\n        }\n        return salarioBase;\n    }\n\n    @Override\n    public String toString() {\n        return String.format(\"[Auxiliar] %s (%s) | Salario: %.2f EUR\",\n                             nombre, turno, calcularSalario());\n    }\n}"
+            }
+        },
+        {
+            "id": "ej5",
+            "numero": 5,
+            "titulo": "Clase genérica Repositorio<T>",
+            "enunciado": "Crea el archivo Repositorio.java. Es una clase genérica: la <T> es un comodín que se sustituye por el tipo real cuando la usas.",
+            "apartados": [
+                "Atributo privado ArrayList<T> elementos, inicializado en el constructor.",
+                "void agregar(T elemento): añade al final.",
+                "boolean eliminar(T elemento): elimina si existe, devuelve true/false.",
+                "T buscarPorIndice(int i): devuelve el elemento en posición i, o null si el índice no existe.",
+                "int totalElementos(): cuántos elementos hay.",
+                "void mostrarTodos(): muestra todos con toString()."
+            ],
+            "pistas": [
+                "La T en Repositorio<T> es un tipo comodín. new Repositorio<Mascota>() crea un repositorio de Mascotas, new Repositorio<String>() uno de Strings.",
+                "ArrayList.remove(objeto) ya devuelve boolean: return elementos.remove(elemento); es suficiente.",
+                "Para validar índice: if (i >= 0 && i < elementos.size()) { return elementos.get(i); } return null;"
+            ],
+            "solucion": {
+                "archivo": "Repositorio.java",
+                "explicacion": "La T entre <> es el tipo genérico: un comodín que Java sustituye cuando usas la clase. Si escribes new Repositorio<Mascota>(), todas las T del código se convierten en Mascota. Si escribes new Repositorio<String>(), se convierten en String. El código es idéntico para ambos casos — no tienes que escribir dos clases distintas. ArrayList.remove() usa el equals() del objeto para buscarlo, por eso es importante que las clases tengan equals() bien implementado.",
+                "codigo": "import java.util.ArrayList;\n\n// La <T> es el tipo genérico — un comodín que defines al crear el objeto:\n// new Repositorio<Mascota>()  →  T se convierte en Mascota\n// new Repositorio<String>()   →  T se convierte en String\npublic class Repositorio<T> {\n    private ArrayList<T> elementos;\n\n    public Repositorio() {\n        this.elementos = new ArrayList<>();\n    }\n\n    // Añadir un elemento al final de la lista\n    public void agregar(T elemento) {\n        elementos.add(elemento);\n    }\n\n    // Eliminar si existe. remove() usa equals() para buscarlo.\n    // Devuelve true si lo encontró y eliminó, false si no estaba\n    public boolean eliminar(T elemento) {\n        return elementos.remove(elemento);\n    }\n\n    // Obtener elemento por posición\n    // Si el índice no existe devuelve null (en vez de lanzar excepción)\n    public T buscarPorIndice(int i) {\n        if (i >= 0 && i < elementos.size()) {\n            return elementos.get(i);\n        }\n        return null;\n    }\n\n    // Cuántos elementos hay en este momento\n    public int totalElementos() {\n        return elementos.size();\n    }\n\n    // Mostrar todos. Como T puede ser cualquier clase,\n    // usamos toString() que todos los objetos Java tienen\n    public void mostrarTodos() {\n        for (T elemento : elementos) {\n            System.out.println(elemento.toString());\n        }\n    }\n}"
+            }
+        },
+        {
+            "id": "ej6",
+            "numero": 6,
+            "titulo": "Clase GestorClinica",
+            "enunciado": "Crea el archivo GestorClinica.java. Usa un HashMap para buscar mascotas por nombre al instante y un HashSet para guardar especies sin repetidos.",
+            "apartados": [
+                "Atributo privado Map<String, Mascota> mascotas (HashMap). Clave = nombre de la mascota.",
+                "Atributo privado Set<String> especies (HashSet). Solo guarda especies únicas.",
+                "registrarMascota(Mascota m): añade al mapa y al set.",
+                "buscarPorNombre(String nombre): devuelve la mascota o null.",
+                "mostrarEspecies(): lista todas las especies.",
+                "mostrarTodasLasMascotas(): recorre con entrySet() y muestra nombre → mascota.",
+                "En el main: registra 4 mascotas con especies repetidas. Comprueba que mostrarEspecies() no repite."
+            ],
+            "pistas": [
+                "mapa.put(clave, valor) añade. mapa.get(clave) obtiene. Si no existe, get() devuelve null directamente.",
+                "El HashSet rechaza duplicados automáticamente: especies.add(\"Perro\") dos veces → solo aparece una.",
+                "Para recorrer el mapa: for (Map.Entry<String, Mascota> entry : mascotas.entrySet()) — entry.getKey() es el nombre, entry.getValue() es la Mascota."
+            ],
+            "solucion": {
+                "archivo": "GestorClinica.java",
+                "explicacion": "HashMap es como un diccionario: cada entrada tiene una clave (el nombre de la mascota) y un valor (el objeto Mascota). mapa.get(\"Rex\") te da la Mascota Rex directamente, sin recorrer toda la lista. HashSet es como una lista que rechaza duplicados: si añades 'Perro' tres veces, solo guarda uno. entrySet() te da todas las entradas del mapa como pares clave/valor — es la forma más eficiente de recorrer un HashMap.",
+                "codigo": "import java.util.HashMap;\nimport java.util.HashSet;\nimport java.util.Map;\nimport java.util.Set;\n\npublic class GestorClinica {\n    // HashMap: busca mascota por nombre al instante (clave → valor)\n    private Map<String, Mascota> mascotas;\n    // HashSet: guarda solo especies únicas, rechaza duplicados\n    private Set<String> especies;\n\n    public GestorClinica() {\n        this.mascotas = new HashMap<>();\n        this.especies = new HashSet<>();\n    }\n\n    public void registrarMascota(Mascota m) {\n        mascotas.put(m.getNombre(), m);  // clave = nombre, valor = objeto Mascota\n        especies.add(m.getEspecie());    // si ya existe 'Perro', el Set lo ignora\n    }\n\n    // get() devuelve null automáticamente si la clave no existe\n    public Mascota buscarPorNombre(String nombre) {\n        return mascotas.get(nombre);\n    }\n\n    public void mostrarEspecies() {\n        System.out.println(\"Especies registradas:\");\n        for (String especie : especies) {\n            System.out.println(\"- \" + especie);\n        }\n    }\n\n    // entrySet() devuelve todas las entradas del mapa como pares clave/valor\n    public void mostrarTodasLasMascotas() {\n        System.out.println(\"Mascotas en el sistema:\");\n        for (Map.Entry<String, Mascota> entry : mascotas.entrySet()) {\n            System.out.println(entry.getKey() + \" -> \" + entry.getValue().toString());\n        }\n    }\n}"
+            }
+        },
+        {
+            "id": "ej7",
+            "numero": 7,
+            "titulo": "Método genérico mostrarMayor — en Main.java",
+            "enunciado": "Este método estático va dentro de Main.java, antes del main. Compara dos objetos del mismo tipo usando compareTo().",
+            "apartados": [
+                "Firma exacta: public static <T extends Comparable<T>> void mostrarMayor(T a, T b)",
+                "Usa a.compareTo(b): si es > 0 a es mayor, si es < 0 b es mayor, si es 0 son iguales.",
+                "Llámalo en el main con dos Strings, dos Integers y dos Veterinario."
+            ],
+            "pistas": [
+                "public static → se puede llamar sin crear un objeto. Es un método de la clase, no de un objeto concreto.",
+                "<T extends Comparable<T>> → T puede ser cualquier tipo, PERO ese tipo debe implementar Comparable. String, Integer y Veterinario (que ya tiene compareTo) lo cumplen.",
+                "compareTo devuelve: positivo si this > otro, negativo si this < otro, 0 si son iguales.",
+                "Veterinario ya tiene compareTo() que compara por salario — lo pusimos en el ejercicio 4."
+            ],
+            "solucion": {
+                "archivo": "Main.java (añadir este método antes del main)",
+                "explicacion": "Vamos parte por parte: 'public' = accesible desde fuera. 'static' = pertenece a la clase Main, no a un objeto, así que puedes llamarlo como mostrarMayor(...) sin hacer new Main(). '<T extends Comparable<T>>' = declara un tipo genérico T con una restricción: T debe implementar la interfaz Comparable<T>. Comparable es una interfaz de Java que obliga a tener compareTo(). String lo implementa (compara alfabéticamente), Integer lo implementa (compara por número), y Veterinario lo implementa porque nosotros pusimos 'implements Comparable<Veterinario>' y escribimos compareTo(). 'void' = no devuelve nada. 'T a, T b' = dos parámetros del mismo tipo genérico T.",
+                "codigo": "// Método genérico estático — va dentro de la clase Main, ANTES del public static void main\n//\n// Desglose de la firma: public static <T extends Comparable<T>> void mostrarMayor(T a, T b)\n//   public         → accesible desde cualquier clase\n//   static         → es de la clase, no de un objeto. Se llama como mostrarMayor(...) directamente\n//   <T extends Comparable<T>> → T es el tipo genérico con restricción:\n//                                T puede ser cualquier tipo SIEMPRE QUE implemente Comparable<T>\n//                                String, Integer, Veterinario (los 3 lo implementan)\n//   void           → no devuelve ningún valor\n//   T a, T b       → dos parámetros del mismo tipo T\npublic static <T extends Comparable<T>> void mostrarMayor(T a, T b) {\n    // compareTo devuelve:\n    //   número positivo  si a > b\n    //   0                si a == b\n    //   número negativo  si a < b\n    int resultado = a.compareTo(b);\n    if (resultado > 0) {\n        System.out.println(\"El mayor es: \" + a);\n    } else if (resultado < 0) {\n        System.out.println(\"El mayor es: \" + b);\n    } else {\n        System.out.println(\"Ambos son iguales.\");\n    }\n}\n\n// Llamadas en el main:\nmostrarMayor(\"Zebra\", \"Avion\");   // String: compara alfabéticamente → El mayor es: Zebra\nmostrarMayor(10, 50);              // Integer: compara por valor → El mayor es: 50\nVeterinario v1 = new Veterinario(\"V1\", 1000, \"A\");  // salario: 1000+500 = 1500\nVeterinario v2 = new Veterinario(\"V2\", 2000, \"B\");  // salario: 2000+500 = 2500\nmostrarMayor(v1, v2);              // Veterinario: compara por salario → El mayor es: [Veterinario] V2..."
+            }
+        },
+        {
+            "id": "ej8",
+            "numero": 8,
+            "titulo": "Stream API y ordenación — en Main.java",
+            "enunciado": "Todo esto se añade al final del main. Crea una lista de 6 mascotas y aplica ordenaciones y operaciones con Stream.",
+            "apartados": [
+                "a) lista.sort(Comparator.comparing(Mascota::getEdad)) — ordena por edad de menor a mayor.",
+                "b) lista.sort(Comparator.comparing(Mascota::getNombre).reversed()) — por nombre en orden inverso.",
+                "c) Ordena por especie y, en empate, por edad descendente con thenComparing.",
+                "d) Muestra la lista después de cada ordenación.",
+                "e) Cuenta cachorros con stream().filter().count().",
+                "f) Lista de nombres con stream().map().collect().",
+                "g) Perros por nombre con stream().filter().sorted().forEach().",
+                "h) Edad media con stream().map().reduce() dividido entre lista.size().",
+                "i) Especies distintas con stream().map().collect(Collectors.toSet())."
+            ],
+            "pistas": [
+                "lista.sort() MODIFICA la lista original. stream().sorted() NO la modifica — crea una secuencia nueva.",
+                "Mascota::getEdad es una 'referencia a método': equivale a escribir m -> m.getEdad() pero más corto.",
+                "Cada operación de Stream SIEMPRE empieza con lista.stream()",
+                "Las operaciones intermedias (filter, map, sorted) no hacen nada todavía. Solo cuando llega la terminal (forEach, collect, count, reduce) se ejecuta todo."
+            ],
+            "solucion": {
+                "archivo": "Main.java (añadir al final del main)",
+                "explicacion": "Un Stream es un TUBO de datos. No modifica la lista original — es como una cadena de operaciones que se aplican una tras otra solo cuando llega la operación final. Comparator.comparing(Mascota::getEdad) crea un comparador que ordena por edad. El :: es una referencia a método: Mascota::getEdad equivale a escribir m -> m.getEdad(). reversed() invierte el orden. thenComparing añade un segundo criterio cuando el primero empata. filter() filtra, map() transforma, collect() recoge en colección, count() cuenta, reduce() acumula en un valor.",
+                "codigo": "// Imports necesarios al principio de Main.java:\n// import java.util.*;\n// import java.util.stream.Collectors;\n\nSystem.out.println(\"\\n--- EJERCICIO 8: STREAMS ---\");\n\n// Lista de prueba con 6 mascotas\nList<Mascota> listaMascotas = new ArrayList<>(Arrays.asList(\n    m1, m2, m3, m4,                              // las creadas en ejercicios anteriores\n    new Mascota(\"Thor\", \"Perro\", 2, p3),\n    new Mascota(\"Mia\",  \"Gato\",  4, p1)\n));\n\n// a) Ordenar por edad de menor a mayor\n// lista.sort() modifica la lista original directamente\n// Mascota::getEdad es como escribir m -> m.getEdad()\nSystem.out.println(\"a) Ordenar por edad:\");\nlistaMascotas.sort(Comparator.comparing(Mascota::getEdad));\nlistaMascotas.forEach(System.out::println);\n\n// b) Ordenar por nombre en orden inverso (Z → A)\n// .reversed() da la vuelta al orden del comparador\nSystem.out.println(\"\\nb) Ordenar por nombre inverso:\");\nlistaMascotas.sort(Comparator.comparing(Mascota::getNombre).reversed());\nlistaMascotas.forEach(System.out::println);\n\n// e) Contar cachorros (edad < 2) usando Stream\n// filter() filtra los que cumplen la condición\n// count() es la operación terminal que devuelve cuántos pasaron el filtro\nSystem.out.println(\"\\ne) Filtrar cachorros:\");\nlong numCachorros = listaMascotas.stream()\n    .filter(Mascota::esCachorro)  // equivale a .filter(m -> m.esCachorro())\n    .count();\nSystem.out.println(\"Hay \" + numCachorros + \" cachorros.\");\n\n// f) Lista de nombres: map() transforma cada Mascota en su nombre (String)\n// collect(Collectors.toList()) recoge los resultados en una lista nueva\nList<String> nombres = listaMascotas.stream()\n    .map(Mascota::getNombre)          // de cada Mascota extraemos solo el nombre\n    .collect(Collectors.toList());    // juntamos todos en una List<String>\nSystem.out.println(\"Nombres: \" + nombres);\n\n// g) Solo perros, ordenados por nombre\n// filter + sorted + forEach: las dos primeras son intermedias, forEach es la terminal\nlistaMascotas.stream()\n    .filter(m -> m.getEspecie().equals(\"Perro\"))        // solo los de especie Perro\n    .sorted(Comparator.comparing(Mascota::getNombre))   // ordenados por nombre\n    .forEach(System.out::println);                       // mostrar cada uno\n\n// h) Edad media: map extrae la edad, reduce suma todas\n// reduce(0, Integer::sum) empieza en 0 y va sumando — equivale a reduce(0, (a,b) -> a+b)\ndouble sumaEdades = listaMascotas.stream()\n    .map(Mascota::getEdad)\n    .reduce(0, Integer::sum);\ndouble edadMedia = sumaEdades / listaMascotas.size();\nSystem.out.println(\"Edad media: \" + edadMedia);\n\n// i) Especies distintas: toSet() elimina duplicados automáticamente\nSet<String> especiesDistintas = listaMascotas.stream()\n    .map(Mascota::getEspecie)\n    .collect(Collectors.toSet());  // como HashSet: sin repetidos\nSystem.out.println(\"Especies: \" + especiesDistintas);"
+            }
+        },
+        {
+            "id": "ej-main",
+            "numero": 9,
+            "titulo": "Main.java — código completo",
+            "enunciado": "Crea el archivo Main.java con este código. Une todos los ejercicios anteriores.",
+            "apartados": [
+                "Imports al principio: import java.util.*; e import java.util.stream.Collectors;",
+                "El método mostrarMayor va antes del main, dentro de la clase.",
+                "El main llama a todos los ejercicios en orden."
+            ],
+            "pistas": [
+                "Si algo no compila, revisa que todos los archivos .java estén en la misma carpeta src.",
+                "Error 'cannot find symbol' = falta un import o el nombre de la clase está mal escrito.",
+                "Empieza ejecutando solo hasta el ejercicio 3 y ve añadiendo el resto poco a poco."
+            ],
+            "solucion": {
+                "archivo": "Main.java",
+                "explicacion": "Este archivo pone en marcha todo. No tiene lógica nueva — solo crea objetos de las clases que ya has programado y llama a sus métodos. Si todos los archivos anteriores compilan bien, este también lo hará.",
+                "codigo": "import java.util.*;\nimport java.util.stream.Collectors;\n\npublic class Main {\n\n    // Método genérico — explicado en detalle en el ejercicio 7\n    public static <T extends Comparable<T>> void mostrarMayor(T a, T b) {\n        int resultado = a.compareTo(b);\n        if (resultado > 0) {\n            System.out.println(\"El mayor es: \" + a);\n        } else if (resultado < 0) {\n            System.out.println(\"El mayor es: \" + b);\n        } else {\n            System.out.println(\"Ambos son iguales.\");\n        }\n    }\n\n    public static void main(String[] args) {\n\n        System.out.println(\"--- EJERCICIO 1: PROPIETARIO ---\");\n        Propietario p1 = new Propietario(\"12345678A\", \"Ana Garcia\", \"612345678\");\n        Propietario p2 = new Propietario(p1); // constructor de copia\n        p2.setTelefono(\"999888777\");           // solo cambia p2\n        System.out.println(\"P1: \" + p1);      // p1 no ha cambiado\n        System.out.println(\"P2: \" + p2);\n\n        System.out.println(\"\\n--- EJERCICIO 2: MASCOTA ---\");\n        Propietario p3 = new Propietario(\"87654321B\", \"Luis Perez\", \"600111222\");\n        Mascota m1 = new Mascota(\"Rex\",  \"Perro\", 3, p1);\n        Mascota m2 = new Mascota(\"Luna\", \"Gato\",  1, p2);\n        Mascota m3 = new Mascota(\"Kira\", \"Perro\", 5, p3);\n        m1.setEdad(-5); // intento inválido: edad queda en 3\n        System.out.println(m1);\n        System.out.println(\"Total mascotas creadas: \" + Mascota.getTotalMascotas());\n\n        System.out.println(\"\\n--- EJERCICIO 3: EMPLEADOS ---\");\n        Empleado[] empleados = {\n            new Veterinario(\"Dr. Lopez\", 1500, \"Cirugía\"),\n            new Auxiliar(\"Carlos\", 1000, \"mañana\"),\n            new Auxiliar(\"Maria\",  1000, \"noche\")\n        };\n        for (Empleado emp : empleados) {\n            System.out.println(emp.toString()); // polimorfismo: usa el toString correcto\n        }\n\n        System.out.println(\"\\n--- EJERCICIO 4: INFORMABLE ---\");\n        List<Informable> informables = new ArrayList<>();\n        informables.add(new Veterinario(\"Dra. Martinez\", 1800, \"Exóticos\"));\n        informables.add(m1);\n        informables.add(m2);\n        for (Informable inf : informables) {\n            System.out.println(inf.generarInforme());\n        }\n\n        System.out.println(\"\\n--- EJERCICIO 6: GESTOR CLINICA ---\");\n        GestorClinica gestor = new GestorClinica();\n        Mascota m4 = new Mascota(\"Nemo\", \"Pez\", 1, p1);\n        gestor.registrarMascota(m1);\n        gestor.registrarMascota(m2);\n        gestor.registrarMascota(m3);\n        gestor.registrarMascota(m4);\n        gestor.mostrarEspecies();\n        Mascota busqueda = gestor.buscarPorNombre(\"Luna\");\n        System.out.println(\"Buscando 'Luna': \" + (busqueda != null ? busqueda : \"No encontrada\"));\n\n        System.out.println(\"\\n--- EJERCICIO 7: MAYOR GENÉRICO ---\");\n        mostrarMayor(\"Zebra\", \"Avion\");\n        mostrarMayor(10, 50);\n        Veterinario v1 = new Veterinario(\"V1\", 1000, \"A\");\n        Veterinario v2 = new Veterinario(\"V2\", 2000, \"B\");\n        mostrarMayor(v1, v2);\n\n        System.out.println(\"\\n--- EJERCICIO 8: STREAMS ---\");\n        List<Mascota> listaMascotas = new ArrayList<>(Arrays.asList(\n            m1, m2, m3, m4,\n            new Mascota(\"Thor\", \"Perro\", 2, p3),\n            new Mascota(\"Mia\",  \"Gato\",  4, p1)\n        ));\n        System.out.println(\"a) Ordenar por edad:\");\n        listaMascotas.sort(Comparator.comparing(Mascota::getEdad));\n        listaMascotas.forEach(System.out::println);\n        System.out.println(\"\\nb) Ordenar por nombre inverso:\");\n        listaMascotas.sort(Comparator.comparing(Mascota::getNombre).reversed());\n        listaMascotas.forEach(System.out::println);\n        System.out.println(\"\\ne) Filtrar cachorros:\");\n        long numCachorros = listaMascotas.stream().filter(Mascota::esCachorro).count();\n        System.out.println(\"Hay \" + numCachorros + \" cachorros.\");\n    }\n}"
+            }
+        }
+    ]
+}
